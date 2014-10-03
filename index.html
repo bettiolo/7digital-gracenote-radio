@@ -3,14 +3,36 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>(7digital + Gracenote) radio</title>
+    <link href="css/style.css" rel="stylesheet" />
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.js"></script>
+    <script src="bower_components/ngstorage/ngStorage.js"></script>
     <script src="js/app.js"></script>
 </head>
 <body ng-controller="radioController">
-    <label>
-        Gracenote ClientId
-        <input type="text" ng-model="gracenote.clientId"/>
-    </label>
-    <p>{{ gracenote.clientId }}</p>
+    <fieldset id="settings">
+        <legend>Settings</legend>
+        <ul>
+            <li>
+                <label>
+                    Gracenote ClientId
+                    <input type="text" ng-model="$storage.gracenoteClientId"/>
+                </label>
+            </li>
+            <li>
+                <label>
+                    7digital Consumer Key
+                    <input type="text" ng-model="$storage.sdConsumerKey"/>
+                </label>
+            </li>
+            <li>
+                <label>
+                    7digital Consumer Secret
+                    <input type="text" ng-model="$storage.sdConsumerSecret"/>
+                </label>
+            </li>
+        </ul>
+        <button ng-click="reset()">Reset</button>
+    </fieldset>
+
 </body>
 </html>

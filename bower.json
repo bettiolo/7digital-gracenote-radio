@@ -12,6 +12,6 @@
     "bower_components"
   ],
   "dependencies": {
-    "ngStorage": "~0.1.8"
+    "ngstorage": "~0.3.0"
   }
 }
