@@ -1,0 +1,17 @@
+{
+  "name": "7digital-gracenote-radio",
+  "version": "0.0.1",
+  "authors": [
+    "Marco Bettiolo <marco@bettiolo.it>"
+  ],
+  "description": "Radio streaming with 7digital and Gracenote integration",
+  "license": "MIT",
+  "homepage": "http://bettiolo.it",
+  "ignore": [
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "ngStorage": "~0.1.8"
+  }
+}
