@@ -1,6 +1,16 @@
-var app = angular.module('7gRadio', ['ngStorage']);
+var app = angular.module('7gRadio', ['ngRoute', 'ngStorage']);
+app.config(function($routeProvider, $locationProvider) {
+	$routeProvider
+		.when('/', {
+			templateUrl : 'partials/main',
+			controller  : 'mainController'
+		})
+		.otherwise({ redirectTo: '/' });
+	$locationProvider.html5Mode(true);
+});
 
-app.controller('radioController', function ($scope, $localStorage, $window) {
+
+app.controller('mainController', function ($scope, $localStorage, $window) {
 	'use strict';
 	var defaultSettings = {
 		gracenoteClientId: 'Your Gracenote Client ID',

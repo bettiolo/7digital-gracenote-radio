@@ -9,21 +9,5 @@ html(lang='en', ng-app='7gRadio')
 		script(src='/bower_components/ngstorage/ngStorage.js')
 		script(src='/js/gracenote.js')
 		script(src='/js/app.js')
-	body(ng-controller='radioController')
-		fieldset#settings
-			legend Settings
-			ul
-				li
-					label
-						| Gracenote ClientId
-						input(type='text', ng-model='$storage.gracenoteClientId')
-				li
-					label
-						| 7digital Consumer Key
-						input(type='text', ng-model='$storage.sdConsumerKey')
-				li
-					label
-						| 7digital Consumer Secret
-						input(type='text', ng-model='$storage.sdConsumerSecret')
-			button(ng-click='reset()') Reset
-			button(ng-click='test()') Test
+	body(ng-controller='mainController')
+		div(ng-view)
