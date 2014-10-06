@@ -21,8 +21,8 @@ function RythmApi(clientId) {
 	};
 
 	RythmApi.prototype._get = function (url, callback) {
-		var xmlHttp = new XMLHttpRequest(),
-			_this = this;
+		var xmlHttp = new XMLHttpRequest();
+		var _this = this;
 		xmlHttp.onreadystatechange = function () {
 			_this._processRequest(this, callback);
 		};

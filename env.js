@@ -1,10 +1,8 @@
 var express = require('express');
-
 var app = express();
 
 function loadEnvironment() {
 	'use strict';
-
 	checkAndLoadEnvironment('GRACENOTE_CLIENT_ID');
 	checkAndLoadEnvironment('SEVENDIGITAL_CONSUMER_KEY');
 	checkAndLoadEnvironment('SEVENDIGITAL_CONSUMER_SECRET');
