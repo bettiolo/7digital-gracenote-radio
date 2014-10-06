@@ -1,0 +1,29 @@
+doctype html
+html(lang='en', ng-app='7gRadio')
+	head
+		title (7digital + Gracenote) Radio
+		meta(charset='utf-8')
+		link(rel='stylesheet', href='/css/style.css')
+		script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.js')
+		script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-route.min.js')
+		script(src='/bower_components/ngstorage/ngStorage.js')
+		script(src='/js/gracenote.js')
+		script(src='/js/app.js')
+	body(ng-controller='radioController')
+		fieldset#settings
+			legend Settings
+			ul
+				li
+					label
+						| Gracenote ClientId
+						input(type='text', ng-model='$storage.gracenoteClientId')
+				li
+					label
+						| 7digital Consumer Key
+						input(type='text', ng-model='$storage.sdConsumerKey')
+				li
+					label
+						| 7digital Consumer Secret
+						input(type='text', ng-model='$storage.sdConsumerSecret')
+			button(ng-click='reset()') Reset
+			button(ng-click='test()') Test
