@@ -1,6 +1,6 @@
 function loadEnvironment(app) {
 	'use strict';
-	app.set('port', process.env.PORT || 3001);
+	app.set('port', process.env.PORT || 3000);
 	checkAndLoadEnvironment('GRACENOTE_CLIENT_ID', app);
 	checkAndLoadEnvironment('SEVENDIGITAL_CONSUMER_KEY', app);
 	checkAndLoadEnvironment('SEVENDIGITAL_CONSUMER_SECRET', app);
