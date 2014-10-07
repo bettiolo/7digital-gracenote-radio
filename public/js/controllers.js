@@ -1,5 +1,5 @@
 angular.module('7gRadio.controllers', [])
-	.controller('mainController', function ($scope, $localStorage, $window) {
+	.controller('mainController', function ($scope, $localStorage, $window, socket) {
 		'use strict';
 		var defaultSettings = {
 			gracenoteClientId: 'Your Gracenote Client ID',
@@ -16,4 +16,7 @@ angular.module('7gRadio.controllers', [])
 			var rythmApi = new gracenote.RythmApi($scope.$storage.gracenoteClientId);
 			rythmApi.register('marco.bettiolo@7digital.com');
 		};
+		socket.on('client:connected', function (data) {
+			console.log('Client ID: ' + data.id);
+		});
 	});

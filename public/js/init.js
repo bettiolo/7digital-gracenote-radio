@@ -2,6 +2,9 @@ var app = angular.module('7gRadio', [
 	'ngRoute',
 	'ngStorage',
 
+	'btford.socket-io',
+
+	'7gRadio.services',
 	'7gRadio.controllers'
 ]);
 

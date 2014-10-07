@@ -12,6 +12,7 @@
     "bower_components"
   ],
   "dependencies": {
-    "ngstorage": "~0.3.0"
+    "ngstorage": "~0.3.0",
+    "angular-socket-io": "~0.6.0"
   }
 }

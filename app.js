@@ -2,7 +2,7 @@ var express = require('express');
 var path = require('path');
 var morgan = require('morgan');
 var stylus = require('stylus');
-
+var io = require('socket.io')();
 var env = require('./env');
 var index = require('./routes/index');
 var partials = require('./routes/partials');
