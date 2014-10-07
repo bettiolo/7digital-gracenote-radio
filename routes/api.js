@@ -1,6 +1,8 @@
 var express = require('express');
+var request = require('request');
 var router = express.Router();
 var config = require('../config');
+var gracenote = require('../src/gracenote');
 
 var api = require('7digital-api').configure({
 	consumerkey: config.sevendigitalConsumerKey,
@@ -11,6 +13,14 @@ var api = require('7digital-api').configure({
 });
 
 router.get('/radio/moods', function (req, res) {
+//	var rythmApi = new gracenote.RythmApi(config.gracenoteClientId);
+//	rythmApi.fieldvalues('RADIOMOOD', '')
+//	request('http://www.google.com', function (error, response, body) {
+//		if (!error && response.statusCode == 200) {
+//			console.log(body) // Print the google web page.
+//		}
+//	})
+
 	res.json([
 		'MOOD1',
 		'MOOD2',
