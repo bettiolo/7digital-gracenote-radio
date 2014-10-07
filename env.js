@@ -1,14 +1,12 @@
-var express = require('express');
-var app = express();
-
-function loadEnvironment() {
+function loadEnvironment(app) {
 	'use strict';
-	checkAndLoadEnvironment('GRACENOTE_CLIENT_ID');
-	checkAndLoadEnvironment('SEVENDIGITAL_CONSUMER_KEY');
-	checkAndLoadEnvironment('SEVENDIGITAL_CONSUMER_SECRET');
+	app.set('port', process.env.PORT || 3001);
+	checkAndLoadEnvironment('GRACENOTE_CLIENT_ID', app);
+	checkAndLoadEnvironment('SEVENDIGITAL_CONSUMER_KEY', app);
+	checkAndLoadEnvironment('SEVENDIGITAL_CONSUMER_SECRET', app);
 }
 
-function checkAndLoadEnvironment(name) {
+function checkAndLoadEnvironment(name, app) {
 	if (!process.env[name]) {
 		throw new Error(name + ' environment variable not set!')
 	}
