@@ -1,5 +1,14 @@
 var express = require('express');
 var router = express.Router();
+var config = require('../config');
+
+var api = require('7digital-api').configure({
+	consumerkey: config.sevendigitalConsumerKey,
+	consumersecret: config.sevendigitalConsumerSecret,
+	defaultParams: {
+		country: 'us'
+	}
+});
 
 router.get('/radio/moods', function (req, res) {
 	res.json([
@@ -26,8 +35,20 @@ router.get('/radio/genres', function (req, res) {
 });
 
 router.get('/radio/stream/:trackId', function (req, res) {
+	var oauth = new api.OAuth();
+	var signedHqUrl = oauth.sign('https://stream.svc.7digital.net/stream/catalogue', {
+		trackId: req.params.trackId,
+		formatId: 56
+	});
+	var signedLqUrl = oauth.sign('https://stream.svc.7digital.net/stream/catalogue', {
+		trackId: req.params.trackId,
+		formatId: 55
+	});
 	res.json({
-		url: 'http://api.7digital.com/1.2/stream?trackId=' + req.params.trackId
+		hqUrl: signedHqUrl,
+		hqFormat: 'AAC 160',
+		lqUrl: signedLqUrl,
+		lqFormat: 'HE-AAC 64'
 	});
 });
 

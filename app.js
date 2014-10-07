@@ -2,15 +2,12 @@ var express = require('express');
 var path = require('path');
 var morgan = require('morgan');
 var stylus = require('stylus');
-
 var bodyParser = require('body-parser');
-var env = require('./env');
 var apiRoute = require('./routes/api');
 var partialsRoute = require('./routes/partials');
 var indexRoute = require('./routes/index');
 var app = express();
 
-env.load(app);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
