@@ -13,6 +13,20 @@
   ],
   "dependencies": {
     "ngstorage": "~0.3.0",
-    "angular-socket-io": "~0.6.0"
+    "angular-socket-io": "~0.6.0",
+    "angular": "~1.2.26",
+    "angular-route": "~1.2.26",
+    "bootstrap": "~3.2.0",
+    "lodash": "~2.4.1",
+    "angular-media-player": "~0.5.8",
+    "jplayer": "~2.7.1",
+    "angular-ui-router": "~0.2.11",
+    "angular-animate": "~1.2.26",
+    "angular-resource": "~1.2.26",
+    "angular-cookies": "~1.2.26",
+    "angular-ui-utils": "~0.1.1",
+    "angular-bootstrap": "~0.11.2",
+    "font-awesome": "~4.2.0",
+    "font-awesome-animation": "~0.0.5"
   }
 }
