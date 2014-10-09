@@ -18,13 +18,13 @@ router.get('/artist/search/:q', function (req, res) {
 	});
 });
 
-router.get('/artist/toptracks/:artistId', function (req, res) {
+router.get('/artist/:artistId/toptracks', function (req, res) {
 	artists.getTopTracks({ artistid: req.params.artistId }, function(err, data) {
 		res.json(data);
 	});
 });
 
-router.get('/artist/similar/:artistId', function (req, res) {
+router.get('/artist/:artistId/similar', function (req, res) {
 	artists.getSimilar({ artistid: req.params.artistId }, function(err, data) {
 		res.json(data);
 	});
