@@ -18,14 +18,14 @@ router.get('/artist/search/:q', function (req, res) {
 	});
 });
 
-router.get('/artist/toptracks/:artistid', function (req, res) {
-	artists.getTopTracks({ artistid: req.params.artistid }, function(err, data) {
+router.get('/artist/toptracks/:artistId', function (req, res) {
+	artists.getTopTracks({ artistid: req.params.artistId }, function(err, data) {
 		res.json(data);
 	});
 });
 
-router.get('/artist/similar/:id', function (req, res) {
-	artists.getSimilar({ artistid: req.params.artistid }, function(err, data) {
+router.get('/artist/similar/:artistId', function (req, res) {
+	artists.getSimilar({ artistid: req.params.artistId }, function(err, data) {
 		res.json(data);
 	});
 });
@@ -42,39 +42,38 @@ router.get('/artist/chart', function (req, res) {
 //	});
 //});
 
-router.get('/radio/moods', function (req, res) {
-//	var rythmApi = new gracenote.RythmApi(config.gracenoteClientId);
-//	rythmApi.fieldvalues('RADIOMOOD', '')
-//	request('http://www.google.com', function (error, response, body) {
-//		if (!error && response.statusCode == 200) {
-//			console.log(body) // Print the google web page.
-//		}
-//	})
-
-	res.json([
-		'MOOD1',
-		'MOOD2',
-		'MOOD3'
-	]);
+router.get('/moods', function (req, res) {
+	res.json(require('../src/radio/fieldvalues-radiomood.json'));
 });
 
-router.get('/radio/eras', function (req, res) {
-	res.json([
-		'1990\'s',
-		'2000\'s',
-		'2010\'s'
-	]);
+router.get('/eras', function (req, res) {
+	res.json(require('../src/radio/fieldvalues-radioera.json'));
 });
 
-router.get('/radio/genres', function (req, res) {
-	res.json([
-		'pop',
-		'dance',
-		'folk'
-	]);
+router.get('/genres', function (req, res) {
+	res.json(require('../src/radio/fieldvalues-radiogenre.json'));
 });
 
-router.get('/radio/stream/:trackId', function (req, res) {
+router.get('/user/create', function (req, res) {
+	res.json(require('../src/register.json'));
+});
+
+router.get('/radio/create', function (req, res) {
+	res.json(require('../src/radio/create.json'));
+});
+
+router.get('/radio/recommend', function (req, res) {
+	res.json(require('../src/radio/recommend.json'));
+});
+
+router.get('/radio/:radioId/:event/:trackId', function (req, res) {
+	console.log('Event: ' + req.params.event);
+	console.log('Radio ID: ' + req.params.radioId);
+	console.log('Track ID: ' + req.params.trackId);
+	res.json(require('../src/radio/create.json'));
+});
+
+router.get('/stream/:trackId', function (req, res) {
 	var oauth = new api.OAuth();
 	var signedHqUrl = oauth.sign('https://stream.svc.7digital.net/stream/catalogue', {
 		trackId: req.params.trackId,
