@@ -27,6 +27,11 @@ div(ng-controller='mainController')
 		ul
 			li(ng-repeat='similarArtist in similarArtists')
 				a(href='#', ng-click='selectArtist(similarArtist)') {{ similarArtist.name }}
+	fieldset(ng-show='isRegistered()')
+		legend Top Artists
+		ul
+			li(ng-repeat='topArtist in topArtists')
+				a(href='#', ng-click='selectArtist(topArtist)') {{ topArtist.name }}
 	//fieldset(ng-show='isArtistSelected()')
 	//	legend Artist Tracks (optional)
 	//	ul

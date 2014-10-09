@@ -10,7 +10,8 @@ angular.module('7gRadio.services', [])
 			artist : {
 				search: $resource('/api/artist/search/:q'),
 				topTracks: $resource('api/artist/:artistId/toptracks'),
-				similar: $resource('api/artist/:artistId/similar')
+				similar: $resource('api/artist/:artistId/similar'),
+				chart: $resource('api/artist/chart')
 			}
 		};
 	});

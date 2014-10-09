@@ -9,7 +9,6 @@ angular.module('7gRadio.controllers', [])
 			email: 'Your Email'
 		};
 		$scope.$storage = $localStorage.$default(defaultSettings);
-
 		$scope.reset = function () {
 			if ($window.confirm('Are you sure you want to reset your settings?')) {
 				$scope.$storage.$reset(defaultSettings);
@@ -26,6 +25,26 @@ angular.module('7gRadio.controllers', [])
 
 		$scope.isRegistered = function () {
 			return !!$scope.$storage.gracenoteUserId;
+		};
+
+		$scope.$watch('isRegistered()', function () {
+			$scope.loadTopArtists();
+		});
+
+		$scope.loadTopArtists = function () {
+			radioApi.artist.chart.get()
+				.$promise
+				.then(function (response) {
+					console.log(response);
+					$scope.topArtists = response.chart.chartItem.map(function (chartItem) {
+						return {
+							id: chartItem.artist.id,
+							name: chartItem.artist.name,
+							position: chartItem.position,
+							change: chartItem.change
+						}
+					});
+				});
 		};
 
 		$scope.searchArtist = function () {
@@ -47,15 +66,15 @@ angular.module('7gRadio.controllers', [])
 
 		$scope.selectArtist = function(artist) {
 			$scope.artist = artist;
-			$scope.getSimilarArtists($scope.artist.id);
-			// $scope.getTopTracks($scope.artist.id);
+			$scope.loadSimilarArtists($scope.artist.id);
+			// $scope.loadTopTracks($scope.artist.id);
 		};
 
 		$scope.isArtistSelected = function() {
 			return !!$scope.artist;
 		};
 
-		$scope.getSimilarArtists = function () {
+		$scope.loadSimilarArtists = function () {
 			radioApi.artist.similar.get({ artistId: $scope.artist.id })
 				.$promise
 				.then(function (response) {
@@ -68,7 +87,7 @@ angular.module('7gRadio.controllers', [])
 				});
 		};
 
-//		$scope.getTopTracks = function () {
+//		$scope.loadTopTracks = function () {
 //			radioApi.artist.topTracks.get({ artistId: $scope.artist.id })
 //				.$promise
 //				.then(function (response) {
