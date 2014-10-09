@@ -1,6 +1,6 @@
 div(ng-controller='mainController')
 	button(ng-click='reset()') Reset
-	fieldset#accountSettings
+	fieldset
 		legend Account settings
 		ul
 			li(ng-hide='isRegistered()')
@@ -10,14 +10,18 @@ div(ng-controller='mainController')
 					button(ng-click='createUser()') Create
 			li(ng-show='isRegistered()') E-Mail: {{ $storage.email }}
 			li(ng-show='isRegistered()') Gracenote User ID: {{ $storage.gracenoteUserId }}
-	fieldset#settings(ng-show='isRegistered()')
+	fieldset(ng-show='isRegistered()')
 		legend Artist
 		ul
 			li
 				label
 					| Artist:
-					input(type='text', ng-model='$storage.artist')
+					input(type='text', ng-model='artistQuery')
 					button(ng-click='searchArtist()') Search
 					ul
 						li(ng-repeat='artist in artists')
-							a(href='#', ng-click='selectArtist(artist)') {{ artist }}
+							a(href='#', ng-click='selectArtist(artist.id)') {{ artist.name }}
+	fieldset(ng-show='isArtistSelected()')
+		legend Artist Tracks (optional)
+		ul
+			li

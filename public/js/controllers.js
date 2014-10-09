@@ -29,12 +29,15 @@ angular.module('7gRadio.controllers', [])
 		};
 
 		$scope.searchArtist = function () {
-			radioApi.artist.search.get({ q : $scope.$storage.artist })
+			radioApi.artist.search.get({ q : $scope.artistQuery })
 				.$promise
 				.then(function(response) {
 					if (response.searchResults) {
 						$scope.artists = response.searchResults.searchResult.map(function (item) {
-							return item.artist.name;
+							return {
+								id: item.artist.id,
+								name: item.artist.name
+							}
 						});
 					} else {
 						$scope.artists = [];
@@ -42,7 +45,15 @@ angular.module('7gRadio.controllers', [])
 				});
 		};
 
-		$scope.selectArtist = function(artist) {
-			$scope.$storage.artist = artist;
-		}
+		$scope.selectArtist = function(artistId) {
+			$scope.artist = $scope.artists.filter(function (item) {
+				return item.id == artistId;
+			})[0];
+		};
+
+		$scope.isArtistSelected = function() {
+			return !!$scope.artist;
+		};
+
+		
 	});
