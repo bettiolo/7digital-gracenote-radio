@@ -54,7 +54,7 @@ router.get('/genres', function (req, res) {
 	res.json(require('../src/radio/fieldvalues-radiogenre.json'));
 });
 
-router.get('/user/create', function (req, res) {
+router.get('/user/create/:email', function (req, res) {
 	res.json(require('../src/register.json'));
 });
 
