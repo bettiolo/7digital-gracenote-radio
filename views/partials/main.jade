@@ -40,10 +40,12 @@ div(ng-controller='mainController')
 					select
 						option(selected)
 						option(ng-repeat='mood in moods') {{ mood.value }}
+			li
 				label Era:
 					select
 						option(selected)
 						option(ng-repeat='era in eras') {{ era.value }}
+			li
 				label Genre:
 					select
 						option(selected)
