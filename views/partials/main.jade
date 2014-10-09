@@ -1,5 +1,5 @@
 fieldset#settings(ng-controller='mainController')
-	legend Settings
+	legend Account settings
 	ul
 		li(ng-hide='isRegistered()')
 			label
@@ -9,5 +9,4 @@ fieldset#settings(ng-controller='mainController')
 		li(ng-show='isRegistered()') E-Mail: {{ $storage.email }}
 		li(ng-show='isRegistered()') Gracenote User ID: {{ $storage.gracenoteUserId }}
 	button(ng-click='reset()') Reset
-	button(ng-click='test()') Test
 
