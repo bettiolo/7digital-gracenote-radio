@@ -32,6 +32,23 @@ div(ng-controller='mainController')
 		ul
 			li(ng-repeat='topArtist in topArtists')
 				a(href='#', ng-click='selectArtist(topArtist)') {{ topArtist.name }}
+	fieldset(ng-show='isRegistered()')
+		legend Options
+		ul
+			li
+				label Mood:
+					select
+						option(selected)
+						option(ng-repeat='mood in moods') {{ mood.value }}
+				label Era:
+					select
+						option(selected)
+						option(ng-repeat='era in eras') {{ era.value }}
+				label Genre:
+					select
+						option(selected)
+						option(ng-repeat='genre in genres') {{ genre.value }}
+
 	//fieldset(ng-show='isArtistSelected()')
 	//	legend Artist Tracks (optional)
 	//	ul

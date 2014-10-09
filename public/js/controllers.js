@@ -2,7 +2,7 @@ angular.module('7gRadio.controllers', [])
 	.controller('mainController', function ($scope, $localStorage, $window, socket, radioApi) {
 		'use strict';
 		socket.on('client:connected', function (data) {
-			console.log('Socket.IO connected. Client ID: ' + data.id);
+			console.info('Socket.IO connected. Client ID: ' + data.id);
 		});
 
 		var defaultSettings = {
@@ -29,19 +29,61 @@ angular.module('7gRadio.controllers', [])
 
 		$scope.$watch('isRegistered()', function () {
 			$scope.loadTopArtists();
+			$scope.loadMoods();
+			$scope.loadEras();
+			$scope.loadGenres();
 		});
 
 		$scope.loadTopArtists = function () {
 			radioApi.artist.chart.get()
 				.$promise
 				.then(function (response) {
-					console.log(response);
 					$scope.topArtists = response.chart.chartItem.map(function (chartItem) {
 						return {
 							id: chartItem.artist.id,
 							name: chartItem.artist.name,
 							position: chartItem.position,
 							change: chartItem.change
+						}
+					});
+				});
+		};
+
+		$scope.loadMoods = function () {
+			radioApi.moods.get()
+				.$promise
+				.then(function (response) {
+					$scope.moods = response.RESPONSE[0].MOOD.map(function (mood) {
+						return {
+							id: mood.ID,
+							value: mood.VALUE
+						}
+					});
+				});
+		};
+
+		$scope.loadEras = function () {
+			radioApi.eras.get()
+				.$promise
+				.then(function (response) {
+					$scope.eras = response.RESPONSE[0].ERA.map(function (era) {
+						return {
+							id: era.ID,
+							value: era.VALUE
+						}
+					});
+				});
+		};
+
+		$scope.loadGenres = function () {
+			radioApi.genres.get()
+				.$promise
+				.then(function (response) {
+					console.log(response);
+					$scope.genres = response.RESPONSE[0].GENRE.map(function (genre) {
+						return {
+							id: genre.ID,
+							value: genre.VALUE
 						}
 					});
 				});
