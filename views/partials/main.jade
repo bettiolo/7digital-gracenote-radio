@@ -7,7 +7,7 @@ div(ng-controller='mainController')
 				label
 					| E-Mail:
 					input(type='text', ng-model='$storage.email')
-					button(ng-click='createUser()') Create
+				button(ng-click='createUser()') Create
 			li(ng-show='isRegistered()') E-Mail: {{ $storage.email }}
 			li(ng-show='isRegistered()') Gracenote User ID: {{ $storage.gracenoteUserId }}
 	fieldset(ng-show='isRegistered()')
@@ -17,10 +17,10 @@ div(ng-controller='mainController')
 				label
 					| Artist:
 					input(type='text', ng-model='artistQuery')
-					button(ng-click='searchArtist()') Search
-					ul
-						li(ng-repeat='artist in artists')
-							a(href='#', ng-click='selectArtist(artist.id)') {{ artist.name }}
+				button(ng-click='searchArtist()') Search
+				ul
+					li(ng-repeat='artist in artists')
+						a(href='#', ng-click='selectArtist(artist.id)') {{ artist.name }}
 	fieldset(ng-show='isArtistSelected()')
 		legend Artist Tracks (optional)
 		ul
@@ -28,3 +28,8 @@ div(ng-controller='mainController')
 				ul
 					li {{ track.artist }} - {{ track.title }}
 					li {{ track.year }} - {{ track.album }}
+	fieldset(ng-show='isArtistSelected()')
+		legend Similar Artists
+		ul
+			li(ng-repeat='artist2 in similarArtists')
+				a(href='#', ng-click='selectArtist(artist2.id)') {{ artist2.name }}

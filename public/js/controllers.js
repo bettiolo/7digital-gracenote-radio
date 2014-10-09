@@ -33,10 +33,10 @@ angular.module('7gRadio.controllers', [])
 				.$promise
 				.then(function(response) {
 					if (response.searchResults) {
-						$scope.artists = response.searchResults.searchResult.map(function (item) {
+						$scope.artists = response.searchResults.searchResult.map(function (searchResult) {
 							return {
-								id: item.artist.id,
-								name: item.artist.name
+								id: searchResult.artist.id,
+								name: searchResult.artist.name
 							}
 						});
 					} else {
@@ -46,8 +46,8 @@ angular.module('7gRadio.controllers', [])
 		};
 
 		$scope.selectArtist = function(artistId) {
-			$scope.artist = $scope.artists.filter(function (item) {
-				return item.id == artistId;
+			$scope.artist = $scope.artists.filter(function (artist) {
+				return artist.id == artistId;
 			})[0];
 			 $scope.getTopTracks($scope.artist.id);
 			 $scope.getSimilarArtists($scope.artist.id);
@@ -61,14 +61,14 @@ angular.module('7gRadio.controllers', [])
 			radioApi.artist.topTracks.get({ artistId: $scope.artist.id })
 				.$promise
 				.then(function (response) {
-					$scope.topTracks = response.tracks.track.map(function (item) {
+					$scope.topTracks = response.tracks.track.map(function (track) {
 						return {
-							id: item.id,
-							title: item.title,
-							artist: item.artist.name,
-							album: item.release.title,
-							releaseDate : item.release.releaseDate,
-							year: new Date(item.release.releaseDate).getFullYear()
+							id: track.id,
+							title: track.title,
+							artist: track.artist.name,
+							album: track.release.title,
+							releaseDate : track.release.releaseDate,
+							year: new Date(track.release.releaseDate).getFullYear()
 						}
 					});
 				});
@@ -78,10 +78,10 @@ angular.module('7gRadio.controllers', [])
 			radioApi.artist.similar.get({ artistId: $scope.artist.id })
 				.$promise
 				.then(function (response) {
-					$scope.similarArtists = response.artists.artist.map(function (item) {
+					$scope.similarArtists = response.artists.artist.map(function (artist) {
 						return {
-							id: item.id,
-							name: item.name
+							id: artist.id,
+							name: artist.name
 						}
 					});
 				});
