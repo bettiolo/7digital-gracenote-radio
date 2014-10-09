@@ -1,17 +1,13 @@
 fieldset#settings(ng-controller='mainController')
 	legend Settings
 	ul
-		li
+		li(ng-hide='isRegistered()')
 			label
-				| Gracenote ClientId
-				input(type='text', ng-model='$storage.gracenoteClientId')
-		li
-			label
-				| 7digital Consumer Key
-				input(type='text', ng-model='$storage.sdConsumerKey')
-		li
-			label
-				| 7digital Consumer Secret
-				input(type='text', ng-model='$storage.sdConsumerSecret')
+				| E-Mail:
+				input(type='text', ng-model='$storage.email')
+				button(ng-click='createUser()') Create
+		li(ng-show='isRegistered()') E-Mail: {{ $storage.email }}
+		li(ng-show='isRegistered()') Gracenote User ID: {{ $storage.gracenoteUserId }}
 	button(ng-click='reset()') Reset
 	button(ng-click='test()') Test
+
