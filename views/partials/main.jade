@@ -31,7 +31,8 @@ div(ng-controller='mainController')
 		legend Top Artists
 		ul
 			li(ng-repeat='topArtist in topArtists')
-				a(href='#', ng-click='selectArtist(topArtist)') {{ topArtist.name }}
+				a(ng-href='#{{ topArtist.id }}', ng-click='selectArtist(topArtist)')
+					| {{ topArtist.position }}. {{ topArtist.name }} ({{ topArtist.change }})
 	fieldset(ng-show='isRegistered()')
 		legend Options
 		ul
@@ -74,7 +75,7 @@ div(ng-controller='mainController')
 			li {{ streaming.hqFormat }}: {{ streaming.hqUrl }}
 			li {{ streaming.lqFormat }}: {{ streaming.lqUrl }}
 	//fieldset(ng-show='isArtistSelected()')
-	//	legend Artist Tracks (optional)
+	//	legend Artist's Top Tracks (optional)
 	//	ul
 	//		li(ng-repeat='track in topTracks')
 	//			ul
