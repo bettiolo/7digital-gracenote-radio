@@ -32,46 +32,27 @@ angular.module('7gRadio.controllers', [])
 			radioApi.artist.search.get({ q : $scope.artistQuery })
 				.$promise
 				.then(function(response) {
-					if (response.searchResults) {
-						$scope.artists = response.searchResults.searchResult.map(function (searchResult) {
-							return {
-								id: searchResult.artist.id,
-								name: searchResult.artist.name
-							}
-						});
-					} else {
+					if (!response.searchResults) {
 						$scope.artists = [];
+						return;
 					}
+					$scope.artists = response.searchResults.searchResult.map(function (searchResult) {
+						return {
+							id: searchResult.artist.id,
+							name: searchResult.artist.name
+						}
+					});
 				});
 		};
 
-		$scope.selectArtist = function(artistId) {
-			$scope.artist = $scope.artists.filter(function (artist) {
-				return artist.id == artistId;
-			})[0];
-			 $scope.getTopTracks($scope.artist.id);
-			 $scope.getSimilarArtists($scope.artist.id);
+		$scope.selectArtist = function(artist) {
+			$scope.artist = artist;
+			$scope.getSimilarArtists($scope.artist.id);
+			// $scope.getTopTracks($scope.artist.id);
 		};
 
 		$scope.isArtistSelected = function() {
 			return !!$scope.artist;
-		};
-
-		$scope.getTopTracks = function () {
-			radioApi.artist.topTracks.get({ artistId: $scope.artist.id })
-				.$promise
-				.then(function (response) {
-					$scope.topTracks = response.tracks.track.map(function (track) {
-						return {
-							id: track.id,
-							title: track.title,
-							artist: track.artist.name,
-							album: track.release.title,
-							releaseDate : track.release.releaseDate,
-							year: new Date(track.release.releaseDate).getFullYear()
-						}
-					});
-				});
 		};
 
 		$scope.getSimilarArtists = function () {
@@ -86,5 +67,26 @@ angular.module('7gRadio.controllers', [])
 					});
 				});
 		};
+
+//		$scope.getTopTracks = function () {
+//			radioApi.artist.topTracks.get({ artistId: $scope.artist.id })
+//				.$promise
+//				.then(function (response) {
+//					if(!response.tracks) {
+//						$scope.topTracks = [];
+//						return;
+//					}
+//					$scope.topTracks = response.tracks.track.map(function (track) {
+//						return {
+//							id: track.id,
+//							title: track.title,
+//							artist: track.artist.name,
+//							album: track.release.title,
+//							releaseDate : track.release.releaseDate,
+//							year: new Date(track.release.releaseDate).getFullYear()
+//						}
+//					});
+//				});
+//		};
 
 	});

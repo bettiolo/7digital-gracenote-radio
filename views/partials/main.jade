@@ -13,23 +13,24 @@ div(ng-controller='mainController')
 	fieldset(ng-show='isRegistered()')
 		legend Artist
 		ul
-			li
+			li(ng-hide='isArtistSelected()')
 				label
 					| Artist:
 					input(type='text', ng-model='artistQuery')
 				button(ng-click='searchArtist()') Search
 				ul
 					li(ng-repeat='artist in artists')
-						a(href='#', ng-click='selectArtist(artist.id)') {{ artist.name }}
-	fieldset(ng-show='isArtistSelected()')
-		legend Artist Tracks (optional)
-		ul
-			li(ng-repeat='track in topTracks')
-				ul
-					li {{ track.artist }} - {{ track.title }}
-					li {{ track.year }} - {{ track.album }}
+						a(href='#', ng-click='selectArtist(artist)') {{ artist.name }}
+			li(ng-show='isArtistSelected()') Artist: {{ artist.name }}
 	fieldset(ng-show='isArtistSelected()')
 		legend Similar Artists
 		ul
-			li(ng-repeat='artist2 in similarArtists')
-				a(href='#', ng-click='selectArtist(artist2.id)') {{ artist2.name }}
+			li(ng-repeat='similarArtist in similarArtists')
+				a(href='#', ng-click='selectArtist(similarArtist)') {{ similarArtist.name }}
+	//fieldset(ng-show='isArtistSelected()')
+	//	legend Artist Tracks (optional)
+	//	ul
+	//		li(ng-repeat='track in topTracks')
+	//			ul
+	//				li {{ track.artist }} - {{ track.title }}
+	//				li {{ track.year }} - {{ track.album }}
