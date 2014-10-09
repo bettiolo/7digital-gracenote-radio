@@ -4,10 +4,10 @@ angular.module('7gRadio.services', [])
 	})
 	.factory('radioApi', function($resource){
 		return {
-			user : {
-				create : $resource('/api/user/create/:email')
+			user: {
+				create: $resource('/api/user/create/:email')
 			},
-			artist : {
+			artist: {
 				search: $resource('/api/artist/search/:q'),
 				topTracks: $resource('api/artist/:artistId/toptracks'),
 				similar: $resource('api/artist/:artistId/similar'),
@@ -15,6 +15,10 @@ angular.module('7gRadio.services', [])
 			},
 			moods: $resource('api/moods'),
 			eras: $resource('api/eras'),
-			genres: $resource('api/genres')
+			genres: $resource('api/genres'),
+			radio: {
+				create: $resource('/api/radio/create'),
+				recommend: $resource('/api/radio/recommend')
+			}
 		};
 	});

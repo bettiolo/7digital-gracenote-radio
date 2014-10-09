@@ -7,7 +7,7 @@ div(ng-controller='mainController')
 				label
 					| E-Mail:
 					input(type='text', ng-model='$storage.email')
-				button(ng-click='createUser()') Create
+				button(ng-click='createUser()') Create User
 			li(ng-show='isRegistered()') E-Mail: {{ $storage.email }}
 			li(ng-show='isRegistered()') Gracenote User ID: {{ $storage.gracenoteUserId }}
 	fieldset(ng-show='isRegistered()')
@@ -50,7 +50,22 @@ div(ng-controller='mainController')
 					select
 						option(selected)
 						option(ng-repeat='genre in genres') {{ genre.value }}
-
+	fieldset(ng-show='isArtistSelected()')
+		legend Radio
+		ul
+			li(ng-hide='isRadioCreated()')
+				button(ng-click='createRadio()') Create
+			li(ng-show='isRadioCreated()', ng-repeat='radioTrack in radio.tracks')
+				ul
+					li {{ radioTrack.artist }} - {{ radioTrack.title }}
+					li {{ radioTrack.album }}
+	fieldset(ng-show='isArtistSelected()')
+		legend Recommended Tracks
+		ul
+			li(ng-repeat='recommendedTrack in recommendation.tracks')
+				ul
+					li {{ recommendedTrack.artist }} - {{ recommendedTrack.title }}
+					li {{ recommendedTrack.album }}
 	//fieldset(ng-show='isArtistSelected()')
 	//	legend Artist Tracks (optional)
 	//	ul

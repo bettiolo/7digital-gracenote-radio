@@ -79,7 +79,6 @@ angular.module('7gRadio.controllers', [])
 			radioApi.genres.get()
 				.$promise
 				.then(function (response) {
-					console.log(response);
 					$scope.genres = response.RESPONSE[0].GENRE.map(function (genre) {
 						return {
 							id: genre.ID,
@@ -110,6 +109,7 @@ angular.module('7gRadio.controllers', [])
 			$scope.artist = artist;
 			$scope.loadSimilarArtists($scope.artist.id);
 			// $scope.loadTopTracks($scope.artist.id);
+			$scope.loadRecommendation();
 		};
 
 		$scope.isArtistSelected = function() {
@@ -150,4 +150,70 @@ angular.module('7gRadio.controllers', [])
 //				});
 //		};
 
+		$scope.createRadio = function () {
+			radioApi.radio.create.get()
+				.$promise
+				.then(function (response) {
+					var tracks = response.RESPONSE[0].ALBUM.map(function (album) {
+						var artist = album.TRACK[0].ARTIST
+							? album.TRACK[0].ARTIST[0].VALUE
+							: album.ARTIST[0].VALUE;
+						var sdId = album.TRACK[0].XID
+							? album.TRACK[0].XID[0].DATASOURCE == 'sevendigitalid'
+							? album.TRACK[0].XID[0].VALUE
+							: null
+							: null;
+						return {
+							album: album.TITLE[0].VALUE,
+							artist: artist,
+							title:  album.TRACK[0].TITLE[0].VALUE,
+							id: sdId
+						}
+					});
+					var matchedTracks = tracks.filter(function (track) {
+						return !!track.id;
+					});
+					$scope.radio = {
+						id: response.RESPONSE[0].RADIO[0].ID,
+						tracks: matchedTracks,
+						gnTracksCount: tracks.length,
+						matchedTracksCount: matchedTracks.length
+					};
+				});
+		};
+
+		$scope.isRadioCreated = function () {
+			return !!$scope.radio;
+		};
+
+		$scope.loadRecommendation = function () {
+			radioApi.radio.recommend.get()
+				.$promise
+				.then(function (response) {
+					var tracks = response.RESPONSE[0].ALBUM.map(function (album) {
+						var artist = album.TRACK[0].ARTIST
+							? album.TRACK[0].ARTIST[0].VALUE
+							: album.ARTIST[0].VALUE;
+						var sdId = album.TRACK[0].XID
+							? album.TRACK[0].XID[0].DATASOURCE == 'sevendigitalid'
+							? album.TRACK[0].XID[0].VALUE
+							: null
+							: null;
+						return {
+							album: album.TITLE[0].VALUE,
+							artist: artist,
+							title:  album.TRACK[0].TITLE[0].VALUE,
+							id: sdId
+						}
+					});
+					var matchedTracks = tracks.filter(function (track) {
+						return !!track.id;
+					});
+					$scope.recommendation = {
+						tracks: matchedTracks,
+						gnTracksCount: tracks.length,
+						matchedTracksCount: matchedTracks.length
+					};
+				});
+		};
 	});
