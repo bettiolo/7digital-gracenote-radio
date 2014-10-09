@@ -49,11 +49,42 @@ angular.module('7gRadio.controllers', [])
 			$scope.artist = $scope.artists.filter(function (item) {
 				return item.id == artistId;
 			})[0];
+			 $scope.getTopTracks($scope.artist.id);
+			 $scope.getSimilarArtists($scope.artist.id);
 		};
 
 		$scope.isArtistSelected = function() {
 			return !!$scope.artist;
 		};
 
-		
+		$scope.getTopTracks = function () {
+			radioApi.artist.topTracks.get({ artistId: $scope.artist.id })
+				.$promise
+				.then(function (response) {
+					$scope.topTracks = response.tracks.track.map(function (item) {
+						return {
+							id: item.id,
+							title: item.title,
+							artist: item.artist.name,
+							album: item.release.title,
+							releaseDate : item.release.releaseDate,
+							year: new Date(item.release.releaseDate).getFullYear()
+						}
+					});
+				});
+		};
+
+		$scope.getSimilarArtists = function () {
+			radioApi.artist.similar.get({ artistId: $scope.artist.id })
+				.$promise
+				.then(function (response) {
+					$scope.similarArtists = response.artists.artist.map(function (item) {
+						return {
+							id: item.id,
+							name: item.name
+						}
+					});
+				});
+		};
+
 	});

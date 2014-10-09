@@ -24,4 +24,7 @@ div(ng-controller='mainController')
 	fieldset(ng-show='isArtistSelected()')
 		legend Artist Tracks (optional)
 		ul
-			li
+			li(ng-repeat='track in topTracks')
+				ul
+					li {{ track.artist }} - {{ track.title }}
+					li {{ track.year }} - {{ track.album }}
