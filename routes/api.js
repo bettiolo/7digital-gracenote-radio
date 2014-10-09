@@ -3,7 +3,6 @@ var request = require('request');
 var router = express.Router();
 var config = require('../config');
 var gracenote = require('../src/gracenote');
-
 var api = require('7digital-api').configure({
 	consumerkey: config.sevendigitalConsumerKey,
 	consumersecret: config.sevendigitalConsumerSecret,
@@ -11,6 +10,37 @@ var api = require('7digital-api').configure({
 		country: 'us'
 	}
 });
+var artists = new api.Artists();
+
+router.get('/artist/search/:q', function (req, res) {
+	artists.search({ q: req.params.q }, function(err, data) {
+		res.json(data);
+	});
+});
+
+router.get('/artist/toptracks/:artistid', function (req, res) {
+	artists.getTopTracks({ artistid: req.params.artistid }, function(err, data) {
+		res.json(data);
+	});
+});
+
+router.get('/artist/similar/:id', function (req, res) {
+	artists.getSimilar({ artistid: req.params.artistid }, function(err, data) {
+		res.json(data);
+	});
+});
+
+router.get('/artist/chart', function (req, res) {
+	artists.getChart(function(err, data) {
+		res.json(data);
+	});
+});
+
+//router.get('/album/recommend/:artistid', function (req, res) {
+//	releases.getRecommendations({ artistid: req.params.artistid }, function(err, data) {
+//		res.json(data);
+//	});
+//});
 
 router.get('/radio/moods', function (req, res) {
 //	var rythmApi = new gracenote.RythmApi(config.gracenoteClientId);
