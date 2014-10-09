@@ -4,6 +4,11 @@ angular.module('7gRadio.services', [])
 	})
 	.factory('radioApi', function($resource){
 		return {
-			createUser : $resource('/api/user/create/:email')
+			user : {
+				create : $resource('/api/user/create/:email')
+			},
+			artist : {
+				search: $resource('/api/artist/search/:q')
+			}
 		};
 	});
