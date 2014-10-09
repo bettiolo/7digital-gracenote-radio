@@ -216,4 +216,21 @@ angular.module('7gRadio.controllers', [])
 					};
 				});
 		};
+
+		$scope.stream = function(trackId) {
+			radioApi.stream.get({ trackId: trackId})
+				.$promise
+				.then(function (response) {
+					$scope.streaming = {
+						hqFormat: response.hqFormat,
+						hqUrl: response.hqUrl,
+						lqFormat: response.lqFormat,
+						lqUrl: response.lqUrl
+					};
+				});
+		};
+
+		$scope.isStreaming = function() {
+			return !!$scope.streaming;
+		};
 	});

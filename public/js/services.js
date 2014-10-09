@@ -19,6 +19,7 @@ angular.module('7gRadio.services', [])
 			radio: {
 				create: $resource('/api/radio/create'),
 				recommend: $resource('/api/radio/recommend')
-			}
+			},
+			stream: $resource('/api/stream/:trackId')
 		};
 	});
