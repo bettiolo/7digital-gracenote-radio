@@ -84,21 +84,28 @@ div(ng-controller='mainController')
 				button(ng-click='audio1.setVolume(audio1.volume - 0.1)', ng-disabled='audio1.volume - 0.1 < 0') Vol -
 				button(ng-click='audio1.setVolume(audio1.volume + 0.1)', ng-disabled='audio1.volume + 0.1 > 1') Vol +
 			li
+				// Thanks to http://css-tricks.com/html5-progress-element/
 				progress(min='0', max='100', value='{{ audio1.currentTime * 100 / audio1.duration }}',
 					ng-click='audio1.seek(audio1.duration * seekPercentage($event))',
 					style='appearance: none; -webkit-appearance: none; -moz-appearance: none;')
 					span(ng-show='audio1.formatTime') {{ audio1.formatTime }} / {{ audio1.formatDuration }}
 			pre.
+				DEBUG INFO
 				audio1 = {
 					playing: {{ audio1.playing }}
+					ended: {{ audio1.ended }}
 					currentTrack: {{ audio1.currentTrack }}
 					tracks: {{ audio1.tracks }}
 					volume: {{ audio1.volume }}
 					formatDuration: {{ audio1.formatDuration }}
-					duration: {{ audio1.duration }}
-					currentTime: {{ audio1.currentTime }}
+					duration: {{ audio1.duration }}s
 					formatTime: {{ audio1.formatTime }}
-					loadPercent: {{ audio1.loadPercent }}
+					currentTime: {{ audio1.currentTime }}s
+					loadPercent: {{ audio1.loadPercent }}%
+					network: {{ audio1.network }}
+					played: {{ audio1.played }}
+					buffered: {{ audio1.buffered }}
+					seekable: {{ audio1.seekable }}
 				}
 	fieldset
 		legend Playlist

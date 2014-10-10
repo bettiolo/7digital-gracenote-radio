@@ -227,6 +227,11 @@ angular.module('7gRadio.controllers', [])
 						lqFormat: response.lqFormat,
 						lqUrl: response.lqUrl
 					};
+					$scope.playlist = [ {
+						src: $scope.streaming.hqUrl,
+						type: 'audio/mp4'
+					}];
+
 				});
 		};
 
@@ -234,25 +239,12 @@ angular.module('7gRadio.controllers', [])
 			return !!$scope.streaming;
 		};
 
-		$scope.playlist = [
-			{ src: 'media/track1.mp3', type: 'audio/mpeg' },
-			{ src: 'media/33931609.aac', type: 'audio/mp4' },
-			{ src: 'media/33576075.aac', type: 'audio/mp4' },
-			{ src: 'media/38612989', type: 'audio/mp4' },
-			{ src: 'media/39085872', type: 'audio/mp4' },
-			{ src: 'media/39370227', type: 'audio/mp4' },
-			{ src: 'media/39677851', type: 'audio/mp4' },
-			{ src: 'media/39707826', type: 'audio/mp4' }
-		];
-
 		$scope.$watch('playlist', function () {
 			console.log('Playlist changed');
-			$scope.audio1.on('canplay', function(){
-				$scope.audio1.off('canplay');
+			$scope.audio1.one('canplay', function(){
 				$scope.audio1.play(0);
 //				$scope.audio1.play(0, true); // does not autoplay
-//				$scope.audio1.on('play', function(){
-//				$scope.audio1.off('play');
+//				$scope.audio1.one('play', function(){
 //					$scope.audio1.seek(0);
 //				});
 //				$scope.audio1.on('ended', function(){
