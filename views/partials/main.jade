@@ -19,7 +19,7 @@ div(ng-controller='mainController')
 				div
 					label
 						| Search artist:&nbsp;
-						input(type='text', ng-model='artistQuery')
+						input(type='text', ng-model='artistQuery', ng-enter='searchArtist()')
 						| &nbsp;
 					button(ng-click='searchArtist()') Search
 					ul
@@ -29,7 +29,8 @@ div(ng-controller='mainController')
 			fieldset.artistChooser.by-7digital
 				legend Similar Artists&nbsp;
 					span(ng-show='artist') to {{ artist.name }}
-				div(ng-hide='similarArtists') Search or select an artist first
+				div(ng-hide='isArtistSelected()') Search or select an artist first
+				div(ng-show='isArtistSelected() && !similarArtists.length') Similar artists not found
 				ul
 					li(ng-repeat='similarArtist in similarArtists')
 						a(href='#', ng-click='selectArtist(similarArtist)') {{ similarArtist.name }}
@@ -47,52 +48,53 @@ div(ng-controller='mainController')
 			button(ng-click='resetArtist()') Clear artist
 			button(ng-hide='isRadioCreated()', ng-click='createRadio()') Create radio
 
-	fieldset.by-gracenote(ng-show='radio.tracks')
-		legend Radio playlist
-		ul
-			li(ng-repeat='radioTrack in radio.tracks')
-				button(ng-click='stream(radioTrack.id)') Play
-				| &nbsp;{{ radioTrack.artist }} - {{ radioTrack.title }} | {{ radioTrack.album }}
+	fieldset.radioPlayer(ng-show='isRadioCreated()')
+		legend Radio
+		.center
 
-	fieldset.by-7digital(ng-show='isRadioCreated()')
-		legend Player
-		button(ng-click='audio1.prev()') << Prev
-		button(ng-click='audio1.play()') Play >
-		button(ng-click='audio1.playPause()')	{{ audio1.playing ? "Pause ||" : "Play >" }}
-		button(ng-click='audio1.next()') Next >>
-		ul
-			li currentTrack index: {{ audio1.currentTrack }} of {{ audio1.tracks }} @ {{ audio1.formatTime }}
-			li volume: {{ audio1.volume * 100 | number: 0 }}%
-				button(ng-click='audio1.setVolume(audio1.volume - 0.1)', ng-disabled='audio1.volume - 0.1 < 0') Vol -
-				button(ng-click='audio1.setVolume(audio1.volume + 0.1)', ng-disabled='audio1.volume + 0.1 > 1') Vol +
-			li
-				// Thanks to http://css-tricks.com/html5-progress-element/
-				progress(min='0', max='100', value='{{ audio1.currentTime * 100 / audio1.duration }}',
-					ng-click='audio1.seek(audio1.duration * seekPercentage($event))',
-					style='appearance: none; -webkit-appearance: none; -moz-appearance: none;')
-					span(ng-show='audio1.formatTime') {{ audio1.formatTime }} / {{ audio1.formatDuration }}
-			pre.
-				(DEBUG INFO)
-				audio1 = {
-					network: {{ audio1.network }}
-					playing: {{ audio1.playing }}
-					ended: {{ audio1.ended }}
-					currentTrack: {{ audio1.currentTrack }}
-					tracks: {{ audio1.tracks }}
-					volume: {{ audio1.volume }}
-					formatDuration: {{ audio1.formatDuration }}
-					duration: {{ audio1.duration }}s
-					formatTime: {{ audio1.formatTime }}
-					currentTime: {{ audio1.currentTime }}s
-					loadPercent: {{ audio1.loadPercent }}%
-					played: {{ audio1.played }}
-					buffered: {{ audio1.buffered }}
-					seekable: {{ audio1.seekable }}
-				}
+			fieldset.playlist.by-gracenote(ng-show='radio.tracks')
+				legend Playlist
+				ul.truncate
+					li(ng-repeat='radioTrack in radio.tracks')
+						button(ng-click='stream(radioTrack.id)') Play
+						| &nbsp;{{ radioTrack.artist }} - {{ radioTrack.title }} | {{ radioTrack.album }}
 
-	fieldset.by-gracenote(ng-show='playlist')
+			fieldset.audioPlayer.by-7digital
+				legend Player
+				button(ng-click='audio1.prev()', ng-disabled='!audio1.tracks') << Prev
+				button(ng-click='audio1.play()', ng-disabled='!audio1.tracks') Play >
+				button(ng-click='audio1.playPause()', ng-disabled='!audio1.tracks')	{{ audio1.playing ? "Pause ||" : "Play >" }}
+				button(ng-click='audio1.next()', ng-disabled='!audio1.tracks') Next >>
+				ul
+					li
+						// Thanks to http://css-tricks.com/html5-progress-element/
+						progress(min='0', max='100', value='{{ audio1.currentTime * 100 / audio1.duration }}',
+							ng-click='audio1.seek(audio1.duration * seekPercentage($event))',
+							style='appearance: none; -webkit-appearance: none; -moz-appearance: none;')
+							span(ng-show='audio1.formatTime') {{ audio1.formatTime }} / {{ audio1.formatDuration }}
+					li Track {{ audio1.currentTrack }} of {{ audio1.tracks }} @ {{ audio1.formatTime }} / {{ audio1.formatDuration }}
+					li Volume: {{ audio1.volume * 100 | number: 0 }}%
+						button(ng-click='audio1.setVolume(audio1.volume - 0.1)', ng-disabled='audio1.volume - 0.1 < 0') Vol -
+						button(ng-click='audio1.setVolume(audio1.volume + 0.1)', ng-disabled='audio1.volume + 0.1 > 1') Vol +
+					pre.
+						(DEBUG INFO)
+						audio1 = {
+							network: {{ audio1.network || 'n/a' }}
+							playing: {{ audio1.playing }}
+							ended: {{ audio1.ended }}
+							currentTrack: {{ audio1.currentTrack }}
+							tracks: {{ audio1.tracks }}
+							volume: {{ audio1.volume }}
+							formatDuration: {{ audio1.formatDuration }}
+							duration: {{ audio1.duration || 0}}s
+							formatTime: {{ audio1.formatTime }}
+							currentTime: {{ audio1.currentTime || 0 }}s
+							loadPercent: {{ audio1.loadPercent || 0 }}%
+						}
+
+	fieldset.by-7digital(ng-show='playlist')
 		legend (DEBUG INFO) Audio player's playlist
-		ul
+		ul.truncate
 			li(ng-repeat='playlistItem in playlist')
 				span(ng-show='audio1.currentTrack - 1 == $index')
 					b [Playing]&nbsp;
@@ -101,7 +103,7 @@ div(ng-controller='mainController')
 
 	fieldset.by-7digital(ng-show='isStreaming()')
 		legend (DEBUG INFO) Streaming info
-		ul
+		ul.truncate
 			li {{ streaming.hqFormat }}: {{ streaming.hqUrl }}
 			li {{ streaming.lqFormat }}: {{ streaming.lqUrl }}
 

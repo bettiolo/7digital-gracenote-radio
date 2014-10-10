@@ -7,7 +7,8 @@ var app = angular.module('7gRadio', [
 	'mediaPlayer',
 
 	'7gRadio.services',
-	'7gRadio.controllers'
+	'7gRadio.controllers',
+	'7gRadio.directives'
 ]);
 
 app.config(function($routeProvider, $locationProvider) {
