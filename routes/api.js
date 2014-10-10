@@ -1,9 +1,8 @@
 var debug = require('debug')('app');
 var express = require('express');
-var request = require('request');
 var router = express.Router();
 var config = require('../config');
-// var gracenote = require('../src/gracenote');
+var gracenote = require('../src/gracenote');
 var api = require('7digital-api').configure({
 	consumerkey: config.sevendigitalConsumerKey,
 	consumersecret: config.sevendigitalConsumerSecret,
@@ -12,7 +11,7 @@ var api = require('7digital-api').configure({
 	}
 });
 var artists = new api.Artists();
-// var rythmApi = new gracenote.RythmApi(config.gracenoteClientId);
+var rythmApi = new gracenote.RythmApi(config.gracenoteClientId);
 
 router.get('/artist/search/:q', function (req, res) {
 	artists.search({ q: req.params.q }, function(err, data) {
@@ -44,31 +43,31 @@ router.get('/artist/chart', function (req, res) {
 //	});
 //});
 
+var https = require('https');
+
 router.get('/moods', function (req, res) {
-	res.json(require('../src/radio/fieldvalues-radiomood.json'));
-//	var gnUserId = req.query.gnUserId;
-//	if (!gnUserId) {
-//		sendError(res, 'gnUserId querystring parameter missing')
-//		return;
-//	}
-//	var url = rythmApi.fieldvalues('RADIOMOOD', gnUserId);
-//	makeRythmGet(req, res, url);
+	requestFieldValue(req, res, 'RADIOMOOD');
 });
 
 router.get('/eras', function (req, res) {
-	res.json(require('../src/radio/fieldvalues-radioera.json'));
+	requestFieldValue(req, res, 'RADIOERA');
 });
 
 router.get('/genres', function (req, res) {
-	res.json(require('../src/radio/fieldvalues-radiogenre.json'));
+	requestFieldValue(req, res, 'RADIOGENRE');
 });
 
-router.get('/user/create/', function (req, res) {
-	res.json(require('../src/register.json'));
+router.get('/user/create', function (req, res) {
+	request(rythmApi.register(), res);
 });
 
 router.get('/radio/create', function (req, res) {
-	res.json(require('../src/radio/create.json'));
+	var gnUserId = ensureGnUserId(req, res);
+	var artistName = ensureQueryParam(req, res, 'artistName');
+	if(!gnUserId || !artistName) {
+		return;
+	}
+	request(rythmApi.createRadio(artistName, gnUserId), res);
 });
 
 router.get('/radio/recommend', function (req, res) {
@@ -100,53 +99,58 @@ router.get('/stream/:trackId', function (req, res) {
 	});
 });
 
+function requestFieldValue(req, res, field) {
+	var gnUserId = ensureGnUserId(req, res);
+	if (!gnUserId) {
+		return;
+	}
+	var gnOptions = rythmApi.fieldvalues(field, gnUserId);
+	request(gnOptions, res);
+}
+
+function ensureGnUserId(req, res) {
+	return ensureQueryParam(req, res, 'gnUserId');
+}
+
+function ensureQueryParam(req, res, queryParamName) {
+	var value = req.query[queryParamName];
+	if (!value) {
+		sendError(res, queryParamName + ' parameter missing');
+	}
+	return value;
+}
+
 function sendError(res, message) {
 	res.status(500);
 	res.send(message);
 }
-//
-//var https = require('https');
-//function makeRythmGet(req, res, url) {
-//	debug('rythm-api-client: GET: ' + url);
-//	var options = {
-//		host: 'c15270144.web.cddbp.net',
-//		path: '/webapi/json/1.0/fieldvalues?client=15270144-3DC024E66B0254D2BA0A7EC101AE1A35&fieldname=RADIOMOOD&user=259893991383018159-39A64AD6F62437A8ADF02A35F06DAEF1'
-//	};
-//
-//	var callback = function(response) {
-//		console.log('callback');
-//		var str = '';
-//		response.on('data', function (chunk) {
-//			console.log('data ...');
-//			str += chunk;
-//		});
-//		response.on('end', function () {
-//			console.log('data OK');
-//			res.status(200);
-//			res.send(str);
-//			// console.log(str);
-//		});
-//	};
-//
-//	https.request(options, callback).end();
 
-//	request(url, function(err, internalResponse, body) {
-//		console.log('WORKS');
-//		res.send(body);
-//		if (!err && internalResponse.statusCode == 200) {
-//			res.status(200);
-//			res.send(body);
-//		} else {
-//			if (internalResponse) {
-//				res.status(internalResponse.statusCode);
-//				if (body){
-//					res.send(body);
-//				} else {
-//					res.send(err);
-//				}
-//			}
-//		}
-//	});
-//}
+function request(options, res) {
+	debug('(rythm-api) GET: https://' + options.headers.host + options.path);
+	var req = https.request(options, function(proxiedResponse) {
+		processProxiedResponse(proxiedResponse, function(data) {
+			res.send(data)
+		});
+	});
+	req.on('error', function (err) {
+		debug('(rythm-api) GET ERROR: https://' + options.headers.host + options.path);
+		debug(err);
+		sendError(res, err);
+	});
+	req.setTimeout(5000, function(socket){
+		req.abort();
+	});
+	req.end();
+}
+
+function processProxiedResponse(proxiedResponse, onEnd) {
+	var str = '';
+	proxiedResponse.on('data', function (chunk) {
+		str += chunk;
+	});
+	proxiedResponse.on('end', function () {
+		onEnd(str);
+	});
+}
 
 module.exports = router;

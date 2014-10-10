@@ -1,27 +1,49 @@
+var querystring = require('querystring');
+
 function RythmApi(clientId) {
 	'use strict';
-	var urlTemplate = 'https://c{{URL_PREFIX}}.web.cddbp.net/webapi/json/1.0/{{METHOD}}?client={{CLIENT_ID}}';
+	var hostTemplate = 'c{{URL_PREFIX}}.web.cddbp.net';
+	var pathTemplate = '/webapi/json/1.0/{{METHOD}}?client={{CLIENT_ID}}';
 
 	this._clientId = clientId;
-	this._urlPrefix = clientId.split('-')[0];
-	this._baseUrl = urlTemplate
-		.replace('{{URL_PREFIX}}', this._urlPrefix)
-		.replace('{{CLIENT_ID}}', this._clientId);
+	this._hostPrefix = clientId.split('-')[0];
+	this._host = hostTemplate.replace('{{URL_PREFIX}}', this._hostPrefix);
+	this._pathTemplate = pathTemplate.replace('{{CLIENT_ID}}', this._clientId);
 
-	RythmApi.prototype.register = function(appUserId) {
+	RythmApi.prototype.register = function() {
 		var method = "register";
-		var url = this._baseUrl.replace('{{METHOD}}', method);
-		url += '&app_userid=' + appUserId;
-		return url;
+		return this._createOptions(method);
 	};
 
 	RythmApi.prototype.fieldvalues = function(fieldName, userId) {
 		var method = "fieldvalues";
-		var url = this._baseUrl.replace('{{METHOD}}', method);
-		url += '&fieldname=' + fieldName;
-		url += '&user=' + userId;
-		return url;
+		return this._createOptions(method, {
+			fieldname: fieldName,
+			user: userId
+		});
 	};
+
+	RythmApi.prototype.createRadio = function(artistName, userId) {
+		var method = "radio/create";
+		return this._createOptions(method, {
+			'artist_name': artistName,
+			user: userId
+		});
+	};
+
+	RythmApi.prototype._createOptions = function (method, parameters) {
+		var path = this._pathTemplate.replace('{{METHOD}}', method);
+		if (parameters) {
+			path += '&' + querystring.stringify(parameters);
+		}
+		return {
+			host: '208.72.242.176',
+			headers: {
+				host: this._host
+			},
+			path: path
+		};
+	}
 }
 
 module.exports = {
