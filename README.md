@@ -3,6 +3,8 @@
 
 Radio streaming with 7digital and Gracenote integration
 
+Pre-requisites: [nodejs + npm](http://nodejs.org)
+
 To install run: 
 ```bash
 npm install
