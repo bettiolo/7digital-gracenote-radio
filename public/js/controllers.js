@@ -91,10 +91,10 @@ angular.module('7gRadio.controllers', [])
 				.$promise
 				.then(function(response) {
 					if (!response.searchResults) {
-						$scope.artists = [];
+						$scope.searchArtists = [];
 						return;
 					}
-					$scope.artists = response.searchResults.searchResult.map(function (searchResult) {
+					$scope.searchArtists = response.searchResults.searchResult.map(function (searchResult) {
 						return {
 							id: searchResult.artist.id,
 							name: searchResult.artist.name
@@ -112,6 +112,11 @@ angular.module('7gRadio.controllers', [])
 
 		$scope.isArtistSelected = function() {
 			return !!$scope.artist;
+		};
+
+		$scope.resetArtist = function () {
+			$scope.artist = null;
+			$scope.similarArtists = [];
 		};
 
 		$scope.loadSimilarArtists = function () {
