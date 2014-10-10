@@ -1,9 +1,9 @@
 angular.module('7gRadio.controllers', [])
-	.controller('mainController', function ($scope, $localStorage, $window, socket, radioApi) {
+	.controller('mainController', function ($scope, $localStorage, $window, /*socket,*/ radioApi) {
 		'use strict';
-		socket.on('client:connected', function (data) {
-			console.info('Socket.IO connected. Client ID: ' + data.id);
-		});
+//		socket.on('client:connected', function (data) {
+//			console.info('Socket.IO connected. Client ID: ' + data.id);
+//		});
 
 		var defaultSettings = {
 		};
