@@ -39,19 +39,16 @@ div(ng-controller='mainController')
 		ul
 			li
 				label Mood:
-					select
-						option(selected)
-						option(ng-repeat='mood in moods') {{ mood.value }}
+					select(ng-model='mood', ng-options='mood.value for mood in moods')
+						option(value='') -- choose mood --
 			li
 				label Era:
-					select
-						option(selected)
-						option(ng-repeat='era in eras') {{ era.value }}
+					select(ng-model='era', ng-options='era.value for era in eras')
+						option(value='') -- choose era --
 			li
 				label Genre:
-					select
-						option(selected)
-						option(ng-repeat='genre in genres') {{ genre.value }}
+					select(ng-model='genre', ng-options='genre.value for genre in genres')
+						option(value='') -- choose genre --
 	fieldset(ng-show='isArtistSelected()')
 		legend Radio
 		ul
