@@ -4,6 +4,7 @@ var app = angular.module('7gRadio', [
 	'ngStorage',
 
 	'btford.socket-io',
+	'mediaPlayer',
 
 	'7gRadio.services',
 	'7gRadio.controllers'

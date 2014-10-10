@@ -17,6 +17,7 @@ app.use(morgan('dev'));
 // app.use('stylus.middleware(path.join(__dirname, 'public')));
 app.use('/css', express.static(path.join(__dirname, 'public/css')));
 app.use('/js', express.static(path.join(__dirname, 'public/js')));
+app.use('/media', express.static(path.join(__dirname, 'public/media')));
 app.use('/bower_components', express.static(path.join(__dirname, 'public/bower_components')));
 
 app.use('/api', apiRoute);

@@ -1,4 +1,5 @@
 div(ng-controller='mainController')
+	audio(media-player='audio1', playlist='playlist', preload='auto')
 	button(ng-click='reset()') Reset
 	fieldset
 		legend Account settings
@@ -31,7 +32,7 @@ div(ng-controller='mainController')
 		legend Top Artists
 		ul
 			li(ng-repeat='topArtist in topArtists')
-				a(ng-href='#{{ topArtist.id }}', ng-click='selectArtist(topArtist)')
+				a(ng-href='#', ng-click='selectArtist(topArtist)')
 					| {{ topArtist.position }}. {{ topArtist.name }} ({{ topArtist.change }})
 	fieldset(ng-show='isRegistered()')
 		legend Options
@@ -74,6 +75,43 @@ div(ng-controller='mainController')
 		ul
 			li {{ streaming.hqFormat }}: {{ streaming.hqUrl }}
 			li {{ streaming.lqFormat }}: {{ streaming.lqUrl }}
+	fieldset
+		legend Player
+		button(ng-click='audio1.prev()') << Prev
+		button(ng-click='audio1.play()') Play >
+		button(ng-click='audio1.playPause()')	{{ audio1.playing ? "Pause ||" : "Play >" }}
+		button(ng-click='audio1.next()') Next >>
+		ul
+			li currentTrack index: {{ audio1.currentTrack }} of {{ audio1.tracks }} @ {{ audio1.formatTime }}
+			li volume: {{ audio1.volume * 100 | number: 0 }}%
+				button(ng-click='audio1.setVolume(audio1.volume - 0.1)', ng-disabled='audio1.volume - 0.1 < 0') Vol -
+				button(ng-click='audio1.setVolume(audio1.volume + 0.1)', ng-disabled='audio1.volume + 0.1 > 1') Vol +
+			li
+				progress(min='0', max='100', value='{{ audio1.currentTime * 100 / audio1.duration }}',
+					ng-click='audio1.seek(audio1.duration * seekPercentage($event))',
+					style='appearance: none; -webkit-appearance: none; -moz-appearance: none;')
+					span(ng-show='audio1.formatTime') {{ audio1.formatTime }} / {{ audio1.formatDuration }}
+			pre.
+				audio1 = {
+					playing: {{ audio1.playing }}
+					currentTrack: {{ audio1.currentTrack }}
+					tracks: {{ audio1.tracks }}
+					volume: {{ audio1.volume }}
+					formatDuration: {{ audio1.formatDuration }}
+					duration: {{ audio1.duration }}
+					currentTime: {{ audio1.currentTime }}
+					formatTime: {{ audio1.formatTime }}
+					loadPercent: {{ audio1.loadPercent }}
+				}
+	fieldset
+		legend Playlist
+		ul
+			li(ng-repeat='playlistItem in playlist')
+				span(ng-show='audio1.currentTrack - 1 == $index')
+					b [Playing]&nbsp;
+				| File: {{ playlistItem.src }}
+				| Type: {{ playlistItem.type }}
+
 	//fieldset(ng-show='isArtistSelected()')
 	//	legend Artist's Top Tracks (optional)
 	//	ul
