@@ -3,7 +3,7 @@ var express = require('express');
 var request = require('request');
 var router = express.Router();
 var config = require('../config');
-var gracenote = require('../src/gracenote');
+// var gracenote = require('../src/gracenote');
 var api = require('7digital-api').configure({
 	consumerkey: config.sevendigitalConsumerKey,
 	consumersecret: config.sevendigitalConsumerSecret,

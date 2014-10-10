@@ -1,7 +1,7 @@
 var express = require('express');
 var path = require('path');
 var morgan = require('morgan');
-var stylus = require('stylus');
+// var stylus = require('stylus');
 var bodyParser = require('body-parser');
 var apiRoute = require('./routes/api');
 var partialsRoute = require('./routes/partials');
