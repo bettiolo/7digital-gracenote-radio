@@ -1,7 +1,7 @@
 var express = require('express');
 var path = require('path');
 var morgan = require('morgan');
-// var stylus = require('stylus');
+var stylus = require('stylus');
 var bodyParser = require('body-parser');
 var apiRoute = require('./routes/api');
 var partialsRoute = require('./routes/partials');
@@ -14,10 +14,11 @@ app.set('view engine', 'jade');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
-// app.use('stylus.middleware(path.join(__dirname, 'public')));
+app.use(stylus.middleware(path.join(__dirname, 'public')));
 app.use('/css', express.static(path.join(__dirname, 'public/css')));
 app.use('/js', express.static(path.join(__dirname, 'public/js')));
 app.use('/media', express.static(path.join(__dirname, 'public/media')));
+app.use('/imgs', express.static(path.join(__dirname, 'public/imgs')));
 app.use('/bower_components', express.static(path.join(__dirname, 'public/bower_components')));
 
 app.use('/api', apiRoute);

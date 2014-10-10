@@ -1,7 +1,7 @@
 div(ng-controller='mainController')
 	audio(media-player='audio1', playlist='playlist', preload='auto')
 
-	fieldset
+	fieldset.by-gracenote
 		legend Account settings
 		ul
 			button(ng-hide='isRegistered()', ng-click='createUser()') Register a Gracenote user
@@ -12,7 +12,7 @@ div(ng-controller='mainController')
 
 	fieldset(ng-show='isRegistered()')
 		legend Artist
-		div(ng-hide='isArtistSelected()')
+		div.by-7digital(ng-hide='isArtistSelected()')
 			label
 				| Search artist:&nbsp;
 				input(type='text', ng-model='artistQuery')
@@ -23,20 +23,20 @@ div(ng-controller='mainController')
 					a(href='#', ng-click='selectArtist(artist)') {{ artist.name }}
 		div(ng-show='isArtistSelected()') Artist: {{ artist.name }}
 
-	fieldset(ng-show='isArtistSelected()')
+	fieldset.by-7digital(ng-show='isArtistSelected()')
 		legend Similar Artists
 		ul
 			li(ng-repeat='similarArtist in similarArtists')
 				a(href='#', ng-click='selectArtist(similarArtist)') {{ similarArtist.name }}
 
-	fieldset(ng-show='isRegistered()')
+	fieldset.by-7digital(ng-show='isRegistered()')
 		legend Top Artists
 		ul
 			li(ng-repeat='topArtist in topArtists')
 				a(ng-href='#', ng-click='selectArtist(topArtist)')
-					| {{ topArtist.position }}. {{ topArtist.name }} ({{ topArtist.change }})
+					| {{ topArtist.position }}. {{ topArtist.name }}
 
-	fieldset(ng-show='isArtistSelected()')
+	fieldset.by-gracenote(ng-show='isArtistSelected()')
 		legend Radio
 		button(ng-hide='isRadioCreated()', ng-click='createRadio()') Create
 		ul
@@ -44,7 +44,7 @@ div(ng-controller='mainController')
 				button(ng-click='stream(radioTrack.id)') Play
 				| &nbsp;{{ radioTrack.artist }} - {{ radioTrack.title }} | {{ radioTrack.album }}
 
-	fieldset(ng-show='isRadioCreated()')
+	fieldset.by-7digital(ng-show='isRadioCreated()')
 		legend Player
 		button(ng-click='audio1.prev()') << Prev
 		button(ng-click='audio1.play()') Play >
@@ -80,7 +80,7 @@ div(ng-controller='mainController')
 					seekable: {{ audio1.seekable }}
 				}
 
-	fieldset(ng-show='playlist')
+	fieldset.by-gracenote(ng-show='playlist')
 		legend Playlist
 		ul
 			li(ng-repeat='playlistItem in playlist')
@@ -89,14 +89,14 @@ div(ng-controller='mainController')
 				| File: {{ playlistItem.src }}
 				| Type: {{ playlistItem.type }}
 
-	fieldset(ng-show='isStreaming()')
+	fieldset.by-7digital(ng-show='isStreaming()')
 		legend Streaming info
 		ul
 			li {{ streaming.hqFormat }}: {{ streaming.hqUrl }}
 			li {{ streaming.lqFormat }}: {{ streaming.lqUrl }}
 
 
-	//fieldset(ng-show='isArtistSelected()')
+	//fieldset.by-7digital(ng-show='isArtistSelected()')
 	//	legend Artist's Top Tracks (optional)
 	//	ul
 	//		li(ng-repeat='track in topTracks')
@@ -104,7 +104,7 @@ div(ng-controller='mainController')
 	//				li {{ track.artist }} - {{ track.title }}
 	//				li {{ track.year }} - {{ track.album }}
 
-	//fieldset(ng-show='isArtistSelected()')
+	//fieldset.by-gracenote(ng-show='isArtistSelected()')
 	//	legend Recommended Tracks
 	//	ul
 	//		li(ng-repeat='recommendedTrack in recommendation.tracks')
@@ -112,7 +112,7 @@ div(ng-controller='mainController')
 	//				li {{ recommendedTrack.artist }} - {{ recommendedTrack.title }}
 	//				li {{ recommendedTrack.album }}
 
-	//fieldset(ng-show='isRegistered()')
+	//fieldset.by-gracenote(ng-show='isRegistered()')
 	//	legend Options
 	//	ul
 	//		li

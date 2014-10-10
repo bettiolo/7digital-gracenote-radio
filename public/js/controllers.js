@@ -41,8 +41,7 @@ angular.module('7gRadio.controllers', [])
 						return {
 							id: chartItem.artist.id,
 							name: chartItem.artist.name,
-							position: chartItem.position,
-							change: chartItem.change
+							position: chartItem.position
 						}
 					});
 				});
