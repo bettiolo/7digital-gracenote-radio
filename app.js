@@ -32,7 +32,7 @@ app.use(function(req, res, next) {
 	if (allowedRadioIps.indexOf(ip) == -1) {
 		var errorString =
 			'X-Forwarded-For: ' + forwardedFor +
-			'or Client IP ' + ip + ' not authorised. Ask to add your IP to the white list (ALLOWED_RADIO_IPS)';
+			' or Client IP ' + ip + ' not authorised. Ask to add your IP to the white list (ALLOWED_RADIO_IPS)';
 		console.error(errorString);
 		var err = new Error(errorString);
 		err.status = 401;
