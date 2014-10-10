@@ -1,3 +1,4 @@
+var config = require('./config');
 var express = require('express');
 var path = require('path');
 var morgan = require('morgan');
@@ -7,6 +8,7 @@ var apiRoute = require('./routes/api');
 var partialsRoute = require('./routes/partials');
 var indexRoute = require('./routes/index');
 var app = express();
+var allowedRadioIps = config.allowedRadioIPs.split(',');
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -20,6 +22,19 @@ app.use('/js', express.static(path.join(__dirname, 'public/js')));
 app.use('/media', express.static(path.join(__dirname, 'public/media')));
 app.use('/imgs', express.static(path.join(__dirname, 'public/imgs')));
 app.use('/bower_components', express.static(path.join(__dirname, 'public/bower_components')));
+
+app.use(function(req, res, next) {
+	var ip = req.connection.remoteAddress;
+	if (allowedRadioIps.indexOf(ip) == -1) {
+		var errorString = 'Client IP ' + ip + ' not authorised.';
+		console.error(errorString);
+		var err = new Error(errorString);
+		err.status = 401;
+		next(err);
+	} else {
+		next();
+	}
+});
 
 app.use('/api', apiRoute);
 app.use('/partials', partialsRoute);
