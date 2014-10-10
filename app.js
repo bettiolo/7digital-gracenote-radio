@@ -29,7 +29,12 @@ app.use(function(req, res, next) {
 		forwardedFor = forwardedFor.split(',')[0];
 	}
 	var ip = req.connection.remoteAddress;
-	if (allowedRadioIps.indexOf(ip) == -1) {
+	var proxyMatch;
+	if (forwardedFor) {
+		proxyMatch = allowedRadioIps.indexOf(forwardedFor) > -1
+	}
+	var ipMatch = allowedRadioIps.indexOf(ip) > -1;
+	if (!proxyMatch && !ipMatch) {
 		var errorString =
 			'X-Forwarded-For: ' + forwardedFor +
 			' or Client IP ' + ip + ' not authorised. Ask to add your IP to the white list (ALLOWED_RADIO_IPS)';
