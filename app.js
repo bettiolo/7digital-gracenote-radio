@@ -24,9 +24,15 @@ app.use('/imgs', express.static(path.join(__dirname, 'public/imgs')));
 app.use('/bower_components', express.static(path.join(__dirname, 'public/bower_components')));
 
 app.use(function(req, res, next) {
+	var forwardedFor = req.headers['x-forwarded-for'];
+	if (forwardedFor) {
+		forwardedFor = forwardedFor.split(',')[0];
+	}
 	var ip = req.connection.remoteAddress;
 	if (allowedRadioIps.indexOf(ip) == -1) {
-		var errorString = 'Client IP ' + ip + ' not authorised.';
+		var errorString =
+			'X-Forwarded-For: ' + forwardedFor +
+			'or Client IP ' + ip + ' not authorised. Ask to add your IP to the white list (ALLOWED_RADIO_IPS)';
 		console.error(errorString);
 		var err = new Error(errorString);
 		err.status = 401;
