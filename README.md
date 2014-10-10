@@ -1,7 +1,11 @@
 7digital-gracenote-radio
 ========================
 
-Radio streaming with 7digital and Gracenote integration
+Radio streaming with 7digital and Gracenote integration.
+
+The matching of 7digita-Gracenote is on the US catalogue so you need to always pass the &country=US parameter to all the calls to 7digital.
+
+Example: http://api.7digital.com/1.2/artist/chart?oauth_consumer_key=YOUR_KEY_HERE&country=US
 
 Pre-requisites: [nodejs + npm](http://nodejs.org)
 
