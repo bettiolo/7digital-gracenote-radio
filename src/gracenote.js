@@ -1,6 +1,6 @@
 function RythmApi(clientId) {
 	'use strict';
-	var urlTemplate = 'https://c{{URL_PREFIX}}.web.cddbp.net/webapi/xml/1.0/{{METHOD}}?client={{CLIENT_ID}}';
+	var urlTemplate = 'https://c{{URL_PREFIX}}.web.cddbp.net/webapi/json/1.0/{{METHOD}}?client={{CLIENT_ID}}';
 
 	this._clientId = clientId;
 	this._urlPrefix = clientId.split('-')[0];
