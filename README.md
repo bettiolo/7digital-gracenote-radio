@@ -12,7 +12,6 @@ Pre-requisites: [nodejs + npm](http://nodejs.org)
 To install run: 
 ```bash
 npm install
-bower install
 ```
 
 Configure the following environment variables:
