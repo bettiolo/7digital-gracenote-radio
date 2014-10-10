@@ -70,16 +70,16 @@ router.get('/radio/create', function (req, res) {
 	request(rythmApi.createRadio(artistName, gnUserId), res);
 });
 
-router.get('/radio/recommend', function (req, res) {
-	res.json(require('../src/radio/recommend.json'));
-});
-
-router.get('/radio/:radioId/:event/:trackId', function (req, res) {
-	console.log('Event: ' + req.params.event);
-	console.log('Radio ID: ' + req.params.radioId);
-	console.log('Track ID: ' + req.params.trackId);
-	res.json(require('../src/radio/create.json'));
-});
+//router.get('/radio/recommend', function (req, res) {
+//	res.json(require('../src/radio/recommend.json'));
+//});
+//
+//router.get('/radio/:radioId/:event/:trackId', function (req, res) {
+//	console.log('Event: ' + req.params.event);
+//	console.log('Radio ID: ' + req.params.radioId);
+//	console.log('Track ID: ' + req.params.trackId);
+//	res.json(require('../src/radio/create.json'));
+//});
 
 router.get('/stream/:trackId', function (req, res) {
 	var oauth = new api.OAuth();

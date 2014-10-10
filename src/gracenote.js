@@ -27,7 +27,9 @@ function RythmApi(clientId) {
 		var method = "radio/create";
 		return this._createOptions(method, {
 			'artist_name': artistName,
-			user: userId
+			user: userId,
+			'select_extended': 'cover,link',
+			'return_count': '20'
 		});
 	};
 

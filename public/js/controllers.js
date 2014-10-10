@@ -107,7 +107,7 @@ angular.module('7gRadio.controllers', [])
 			$scope.artist = artist;
 			$scope.loadSimilarArtists($scope.artist.id);
 			// $scope.loadTopTracks($scope.artist.id);
-			$scope.loadRecommendation();
+			// $scope.loadRecommendation();
 		};
 
 		$scope.isArtistSelected = function() {
@@ -154,8 +154,11 @@ angular.module('7gRadio.controllers', [])
 //		};
 
 		$scope.createRadio = function () {
-			radioApi.radio.create.get()
-				.$promise
+			$scope.radio = null;
+			radioApi.radio.create.get({
+				gnUserId: $scope.$storage.gracenoteUserId,
+				artistName: $scope.artist.name
+			}).$promise
 				.then(function (response) {
 					var tracks = response.RESPONSE[0].ALBUM.map(function (album) {
 						var artist = album.TRACK[0].ARTIST
@@ -189,36 +192,40 @@ angular.module('7gRadio.controllers', [])
 			return !!$scope.radio;
 		};
 
-		$scope.loadRecommendation = function () {
-			radioApi.radio.recommend.get()
-				.$promise
-				.then(function (response) {
-					var tracks = response.RESPONSE[0].ALBUM.map(function (album) {
-						var artist = album.TRACK[0].ARTIST
-							? album.TRACK[0].ARTIST[0].VALUE
-							: album.ARTIST[0].VALUE;
-						var sdId = album.TRACK[0].XID
-							? album.TRACK[0].XID[0].DATASOURCE == 'sevendigitalid'
-							? album.TRACK[0].XID[0].VALUE
-							: null
-							: null;
-						return {
-							album: album.TITLE[0].VALUE,
-							artist: artist,
-							title:  album.TRACK[0].TITLE[0].VALUE,
-							id: sdId
-						}
-					});
-					var matchedTracks = tracks.filter(function (track) {
-						return !!track.id;
-					});
-					$scope.recommendation = {
-						tracks: matchedTracks,
-						gnTracksCount: tracks.length,
-						matchedTracksCount: matchedTracks.length
-					};
-				});
+		$scope.hasRadioTracks = function () {
+			return !!$scope.radio && !!$scope.radio.matchedTracksCount;
 		};
+
+//		$scope.loadRecommendation = function () {
+//			radioApi.radio.recommend.get()
+//				.$promise
+//				.then(function (response) {
+//					var tracks = response.RESPONSE[0].ALBUM.map(function (album) {
+//						var artist = album.TRACK[0].ARTIST
+//							? album.TRACK[0].ARTIST[0].VALUE
+//							: album.ARTIST[0].VALUE;
+//						var sdId = album.TRACK[0].XID
+//							? album.TRACK[0].XID[0].DATASOURCE == 'sevendigitalid'
+//							? album.TRACK[0].XID[0].VALUE
+//							: null
+//							: null;
+//						return {
+//							album: album.TITLE[0].VALUE,
+//							artist: artist,
+//							title:  album.TRACK[0].TITLE[0].VALUE,
+//							id: sdId
+//						}
+//					});
+//					var matchedTracks = tracks.filter(function (track) {
+//						return !!track.id;
+//					});
+//					$scope.recommendation = {
+//						tracks: matchedTracks,
+//						gnTracksCount: tracks.length,
+//						matchedTracksCount: matchedTracks.length
+//					};
+//				});
+//		};
 
 		$scope.stream = function(trackId) {
 			radioApi.stream.get({ trackId: trackId})
@@ -243,7 +250,6 @@ angular.module('7gRadio.controllers', [])
 		};
 
 		$scope.$watch('playlist', function () {
-			console.log('Playlist changed');
 			$scope.audio1.one('canplay', function(){
 				$scope.audio1.play(0);
 //				$scope.audio1.play(0, true); // does not autoplay
