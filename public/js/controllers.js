@@ -6,7 +6,6 @@ angular.module('7gRadio.controllers', [])
 		});
 
 		var defaultSettings = {
-			email: 'Your Email'
 		};
 		$scope.$storage = $localStorage.$default(defaultSettings);
 		$scope.reset = function () {
@@ -16,7 +15,7 @@ angular.module('7gRadio.controllers', [])
 		};
 
 		$scope.createUser = function () {
-			radioApi.user.create.get({ email : $scope.$storage.email })
+			radioApi.user.create.get()
 				.$promise
 				.then(function(response) {
 					$scope.$storage.gracenoteUserId = response.RESPONSE[0].USER[0].VALUE;
@@ -29,9 +28,9 @@ angular.module('7gRadio.controllers', [])
 
 		$scope.$watch('isRegistered()', function () {
 			$scope.loadTopArtists();
-			$scope.loadMoods();
-			$scope.loadEras();
-			$scope.loadGenres();
+			// $scope.loadMoods();
+			// $scope.loadEras();
+			// $scope.loadGenres();
 		});
 
 		$scope.loadTopArtists = function () {
@@ -49,44 +48,44 @@ angular.module('7gRadio.controllers', [])
 				});
 		};
 
-		$scope.loadMoods = function () {
-			radioApi.moods.get()
-				.$promise
-				.then(function (response) {
-					$scope.moods = response.RESPONSE[0].MOOD.map(function (mood) {
-						return {
-							id: mood.ID,
-							value: mood.VALUE
-						}
-					});
-				});
-		};
-
-		$scope.loadEras = function () {
-			radioApi.eras.get()
-				.$promise
-				.then(function (response) {
-					$scope.eras = response.RESPONSE[0].ERA.map(function (era) {
-						return {
-							id: era.ID,
-							value: era.VALUE
-						}
-					});
-				});
-		};
-
-		$scope.loadGenres = function () {
-			radioApi.genres.get()
-				.$promise
-				.then(function (response) {
-					$scope.genres = response.RESPONSE[0].GENRE.map(function (genre) {
-						return {
-							id: genre.ID,
-							value: genre.VALUE
-						}
-					});
-				});
-		};
+//		$scope.loadMoods = function () {
+//			radioApi.moods.query({gnUserId: $scope.$storage.gracenoteUserId}).get()
+//				.$promise
+//				.then(function (response) {
+//					$scope.moods = response.RESPONSE[0].MOOD.map(function (mood) {
+//						return {
+//							id: mood.ID,
+//							value: mood.VALUE
+//						}
+//					});
+//				});
+//		};
+//
+//		$scope.loadEras = function () {
+//			radioApi.eras.get()
+//				.$promise
+//				.then(function (response) {
+//					$scope.eras = response.RESPONSE[0].ERA.map(function (era) {
+//						return {
+//							id: era.ID,
+//							value: era.VALUE
+//						}
+//					});
+//				});
+//		};
+//
+//		$scope.loadGenres = function () {
+//			radioApi.genres.get()
+//				.$promise
+//				.then(function (response) {
+//					$scope.genres = response.RESPONSE[0].GENRE.map(function (genre) {
+//						return {
+//							id: genre.ID,
+//							value: genre.VALUE
+//						}
+//					});
+//				});
+//		};
 
 		$scope.searchArtist = function () {
 			radioApi.artist.search.get({ q : $scope.artistQuery })
@@ -265,6 +264,5 @@ angular.module('7gRadio.controllers', [])
 				return 0;
 			}
 		}
-
 
 	});

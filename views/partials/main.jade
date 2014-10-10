@@ -1,78 +1,50 @@
 div(ng-controller='mainController')
 	audio(media-player='audio1', playlist='playlist', preload='auto')
-	button(ng-click='reset()') Reset
+
 	fieldset
 		legend Account settings
 		ul
-			li(ng-hide='isRegistered()')
-				label
-					| E-Mail:
-					input(type='text', ng-model='$storage.email')
-				button(ng-click='createUser()') Create User
-			li(ng-show='isRegistered()') E-Mail: {{ $storage.email }}
-			li(ng-show='isRegistered()') Gracenote User ID: {{ $storage.gracenoteUserId }}
+			button(ng-hide='isRegistered()', ng-click='createUser()') Register a Gracenote user
+			div(ng-show='isRegistered()')
+				b Gracenote User ID:&nbsp;
+				span {{ $storage.gracenoteUserId }}&nbsp;
+				button(ng-click='reset()') Reset
+
 	fieldset(ng-show='isRegistered()')
 		legend Artist
-		ul
-			li(ng-hide='isArtistSelected()')
-				label
-					| Artist:
-					input(type='text', ng-model='artistQuery')
-				button(ng-click='searchArtist()') Search
-				ul
-					li(ng-repeat='artist in artists')
-						a(href='#', ng-click='selectArtist(artist)') {{ artist.name }}
-			li(ng-show='isArtistSelected()') Artist: {{ artist.name }}
+		div(ng-hide='isArtistSelected()')
+			label
+				| Search artist:&nbsp;
+				input(type='text', ng-model='artistQuery')
+				| &nbsp;
+			button(ng-click='searchArtist()') Search
+			ul
+				li(ng-repeat='artist in artists')
+					a(href='#', ng-click='selectArtist(artist)') {{ artist.name }}
+		div(ng-show='isArtistSelected()') Artist: {{ artist.name }}
+
 	fieldset(ng-show='isArtistSelected()')
 		legend Similar Artists
 		ul
 			li(ng-repeat='similarArtist in similarArtists')
 				a(href='#', ng-click='selectArtist(similarArtist)') {{ similarArtist.name }}
+
 	fieldset(ng-show='isRegistered()')
 		legend Top Artists
 		ul
 			li(ng-repeat='topArtist in topArtists')
 				a(ng-href='#', ng-click='selectArtist(topArtist)')
 					| {{ topArtist.position }}. {{ topArtist.name }} ({{ topArtist.change }})
-	fieldset(ng-show='isRegistered()')
-		legend Options
-		ul
-			li
-				label Mood:
-					select(ng-model='mood', ng-options='mood.value for mood in moods')
-						option(value='') -- choose mood --
-			li
-				label Era:
-					select(ng-model='era', ng-options='era.value for era in eras')
-						option(value='') -- choose era --
-			li
-				label Genre:
-					select(ng-model='genre', ng-options='genre.value for genre in genres')
-						option(value='') -- choose genre --
+
 	fieldset(ng-show='isArtistSelected()')
 		legend Radio
+		button(ng-hide='isRadioCreated()', ng-click='createRadio()') Create
 		ul
-			li(ng-hide='isRadioCreated()')
-				button(ng-click='createRadio()') Create
 			li(ng-show='isRadioCreated()', ng-repeat='radioTrack in radio.tracks')
-				ul
-					li {{ radioTrack.artist }} - {{ radioTrack.title }}
-					li {{ radioTrack.album }}
-					li
-						button(ng-click='stream(radioTrack.id)') Play
-	fieldset(ng-show='isArtistSelected()')
-		legend Recommended Tracks
-		ul
-			li(ng-repeat='recommendedTrack in recommendation.tracks')
-				ul
-					li {{ recommendedTrack.artist }} - {{ recommendedTrack.title }}
-					li {{ recommendedTrack.album }}
-	fieldset(ng-show='isStreaming()')
-		legend Streaming info
-		ul
-			li {{ streaming.hqFormat }}: {{ streaming.hqUrl }}
-			li {{ streaming.lqFormat }}: {{ streaming.lqUrl }}
-	fieldset
+				button(ng-click='stream(radioTrack.id)') Play
+				| &nbsp;{{ radioTrack.artist }} - {{ radioTrack.title }} | {{ radioTrack.album }}
+
+	fieldset(ng-show='isRadioCreated()')
 		legend Player
 		button(ng-click='audio1.prev()') << Prev
 		button(ng-click='audio1.play()') Play >
@@ -92,6 +64,7 @@ div(ng-controller='mainController')
 			pre.
 				DEBUG INFO
 				audio1 = {
+					network: {{ audio1.network }}
 					playing: {{ audio1.playing }}
 					ended: {{ audio1.ended }}
 					currentTrack: {{ audio1.currentTrack }}
@@ -102,12 +75,12 @@ div(ng-controller='mainController')
 					formatTime: {{ audio1.formatTime }}
 					currentTime: {{ audio1.currentTime }}s
 					loadPercent: {{ audio1.loadPercent }}%
-					network: {{ audio1.network }}
 					played: {{ audio1.played }}
 					buffered: {{ audio1.buffered }}
 					seekable: {{ audio1.seekable }}
 				}
-	fieldset
+
+	fieldset(ng-show='playlist')
 		legend Playlist
 		ul
 			li(ng-repeat='playlistItem in playlist')
@@ -116,6 +89,13 @@ div(ng-controller='mainController')
 				| File: {{ playlistItem.src }}
 				| Type: {{ playlistItem.type }}
 
+	fieldset(ng-show='isStreaming()')
+		legend Streaming info
+		ul
+			li {{ streaming.hqFormat }}: {{ streaming.hqUrl }}
+			li {{ streaming.lqFormat }}: {{ streaming.lqUrl }}
+
+
 	//fieldset(ng-show='isArtistSelected()')
 	//	legend Artist's Top Tracks (optional)
 	//	ul
@@ -123,3 +103,27 @@ div(ng-controller='mainController')
 	//			ul
 	//				li {{ track.artist }} - {{ track.title }}
 	//				li {{ track.year }} - {{ track.album }}
+
+	//fieldset(ng-show='isArtistSelected()')
+	//	legend Recommended Tracks
+	//	ul
+	//		li(ng-repeat='recommendedTrack in recommendation.tracks')
+	//			ul
+	//				li {{ recommendedTrack.artist }} - {{ recommendedTrack.title }}
+	//				li {{ recommendedTrack.album }}
+
+	//fieldset(ng-show='isRegistered()')
+	//	legend Options
+	//	ul
+	//		li
+	//			label Mood:
+	//				select(ng-model='mood', ng-options='mood.value for mood in moods')
+	//					//option(value='') -- choose mood --
+	//		li
+	//			label Era:
+	//				select(ng-model='era', ng-options='era.value for era in eras')
+	//					//option(value='') -- choose era --
+	//		li
+	//			label Genre:
+	//				select(ng-model='genre', ng-options='genre.value for genre in genres')
+	//					//option(value='') -- choose genre --
