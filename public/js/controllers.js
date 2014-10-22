@@ -176,14 +176,9 @@ angular.module('7gRadio.controllers', [])
 							id: sdId
 						}
 					});
-					var matchedTracks = tracks.filter(function (track) {
-						return !!track.id;
-					});
 					$scope.radio = {
 						id: response.RESPONSE[0].RADIO[0].ID,
-						tracks: matchedTracks,
-						gnTracksCount: tracks.length,
-						matchedTracksCount: matchedTracks.length
+						tracks: tracks
 					};
 				});
 		};
@@ -193,7 +188,7 @@ angular.module('7gRadio.controllers', [])
 		};
 
 		$scope.hasRadioTracks = function () {
-			return !!$scope.radio && !!$scope.radio.matchedTracksCount;
+			return !!$scope.radio && !!$scope.radio.tracks.length;
 		};
 
 //		$scope.loadRecommendation = function () {

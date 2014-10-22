@@ -29,7 +29,8 @@ function RythmApi(clientId) {
 			'artist_name': artistName,
 			user: userId,
 			'select_extended': 'cover,link',
-			'return_count': '20'
+			'return_count': '25',
+			'filter_catalog': 'sevendigitalid'
 		});
 	};
 

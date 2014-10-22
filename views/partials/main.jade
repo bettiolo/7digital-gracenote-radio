@@ -53,7 +53,7 @@ div(ng-controller='mainController')
 		.center
 
 			fieldset.playlist.by-gracenote(ng-show='isRadioCreated()')
-				legend Playlist ({{ radio.matchedTracksCount / radio.gnTracksCount * 100 }}% matched )
+				legend Playlist
 				ul.truncate(ng-show='hasRadioTracks()')
 					li(ng-repeat='radioTrack in radio.tracks')
 						button(ng-click='stream(radioTrack.id)') Play
