@@ -40,10 +40,7 @@ function RythmApi(clientId) {
 			path += '&' + querystring.stringify(parameters);
 		}
 		return {
-			host: '208.72.242.176',
-			headers: {
-				host: this._host
-			},
+			host: this._host,
 			path: path
 		};
 	}

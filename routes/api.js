@@ -126,14 +126,14 @@ function sendError(res, message) {
 }
 
 function request(options, res) {
-	debug('(rythm-api) GET: https://' + options.headers.host + options.path);
+	debug('(rythm-api) GET: https://' + options.host + options.path);
 	var req = https.request(options, function(proxiedResponse) {
 		processProxiedResponse(proxiedResponse, function(data) {
 			res.send(data)
 		});
 	});
 	req.on('error', function (err) {
-		debug('(rythm-api) GET ERROR: https://' + options.headers.host + options.path);
+		debug('(rythm-api) GET ERROR: https://' + options.host + options.path);
 		debug(err);
 		sendError(res, err);
 	});
