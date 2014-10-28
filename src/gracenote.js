@@ -10,12 +10,12 @@ function RythmApi(clientId) {
 	this._host = hostTemplate.replace('{{URL_PREFIX}}', this._hostPrefix);
 	this._pathTemplate = pathTemplate.replace('{{CLIENT_ID}}', this._clientId);
 
-	RythmApi.prototype.register = function() {
+	RythmApi.prototype.register = function () {
 		var method = "register";
 		return this._createOptions(method);
 	};
 
-	RythmApi.prototype.fieldvalues = function(fieldName, userId) {
+	RythmApi.prototype.fieldvalues = function (fieldName, userId) {
 		var method = "fieldvalues";
 		return this._createOptions(method, {
 			fieldname: fieldName,
@@ -23,7 +23,7 @@ function RythmApi(clientId) {
 		});
 	};
 
-	RythmApi.prototype.createRadio = function(artistName, userId) {
+	RythmApi.prototype.createRadio = function (artistName, userId) {
 		var method = "radio/create";
 		return this._createOptions(method, {
 			'artist_name': artistName,
@@ -47,6 +47,6 @@ function RythmApi(clientId) {
 }
 
 module.exports = {
-	RythmApi : RythmApi
+	RythmApi: RythmApi
 };
 

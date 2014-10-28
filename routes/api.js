@@ -4,37 +4,37 @@ var router = express.Router();
 var config = require('../config');
 var gracenote = require('../src/gracenote');
 var api = require('7digital-api').configure({
-	consumerkey: config.sevendigitalConsumerKey,
-	consumersecret: config.sevendigitalConsumerSecret,
-	defaultParams: {
-		country: 'us'
-	}
+  consumerkey: config.sevendigitalConsumerKey,
+  consumersecret: config.sevendigitalConsumerSecret,
+  defaultParams: {
+    country: 'us'
+  }
 });
 var artists = new api.Artists();
 var rythmApi = new gracenote.RythmApi(config.gracenoteClientId);
 
 router.get('/artist/search/:q', function (req, res) {
-	artists.search({ q: req.params.q }, function(err, data) {
-		res.json(data);
-	});
+  artists.search({q: req.params.q}, function (err, data) {
+    res.json(data);
+  });
 });
 
 router.get('/artist/:artistId/toptracks', function (req, res) {
-	artists.getTopTracks({ artistid: req.params.artistId }, function(err, data) {
-		res.json(data);
-	});
+  artists.getTopTracks({artistid: req.params.artistId}, function (err, data) {
+    res.json(data);
+  });
 });
 
 router.get('/artist/:artistId/similar', function (req, res) {
-	artists.getSimilar({ artistid: req.params.artistId }, function(err, data) {
-		res.json(data);
-	});
+  artists.getSimilar({artistid: req.params.artistId}, function (err, data) {
+    res.json(data);
+  });
 });
 
 router.get('/artist/chart', function (req, res) {
-	artists.getChart(function(err, data) {
-		res.json(data);
-	});
+  artists.getChart(function (err, data) {
+    res.json(data);
+  });
 });
 
 //router.get('/album/recommend/:artistid', function (req, res) {
@@ -46,28 +46,28 @@ router.get('/artist/chart', function (req, res) {
 var https = require('https');
 
 router.get('/moods', function (req, res) {
-	requestFieldValue(req, res, 'RADIOMOOD');
+  requestFieldValue(req, res, 'RADIOMOOD');
 });
 
 router.get('/eras', function (req, res) {
-	requestFieldValue(req, res, 'RADIOERA');
+  requestFieldValue(req, res, 'RADIOERA');
 });
 
 router.get('/genres', function (req, res) {
-	requestFieldValue(req, res, 'RADIOGENRE');
+  requestFieldValue(req, res, 'RADIOGENRE');
 });
 
 router.get('/user/create', function (req, res) {
-	request(rythmApi.register(), res);
+  request(rythmApi.register(), res);
 });
 
 router.get('/radio/create', function (req, res) {
-	var gnUserId = ensureGnUserId(req, res);
-	var artistName = ensureQueryParam(req, res, 'artistName');
-	if(!gnUserId || !artistName) {
-		return;
-	}
-	request(rythmApi.createRadio(artistName, gnUserId), res);
+  var gnUserId = ensureGnUserId(req, res);
+  var artistName = ensureQueryParam(req, res, 'artistName');
+  if (!gnUserId || !artistName) {
+    return;
+  }
+  request(rythmApi.createRadio(artistName, gnUserId), res);
 });
 
 //router.get('/radio/recommend', function (req, res) {
@@ -82,75 +82,75 @@ router.get('/radio/create', function (req, res) {
 //});
 
 router.get('/stream/:trackId', function (req, res) {
-	var oauth = new api.OAuth();
-	var signedHqUrl = oauth.sign('https://stream.svc.7digital.net/stream/catalogue', {
-		trackId: req.params.trackId,
-		formatId: 56
-	});
-	var signedLqUrl = oauth.sign('https://stream.svc.7digital.net/stream/catalogue', {
-		trackId: req.params.trackId,
-		formatId: 55
-	});
-	res.json({
-		hqUrl: signedHqUrl,
-		hqFormat: 'AAC 160',
-		lqUrl: signedLqUrl,
-		lqFormat: 'HE-AAC 64'
-	});
+  var oauth = new api.OAuth();
+  var signedHqUrl = oauth.sign('https://stream.svc.7digital.net/stream/catalogue', {
+    trackId: req.params.trackId,
+    formatId: 56
+  });
+  var signedLqUrl = oauth.sign('https://stream.svc.7digital.net/stream/catalogue', {
+    trackId: req.params.trackId,
+    formatId: 55
+  });
+  res.json({
+    hqUrl: signedHqUrl,
+    hqFormat: 'AAC 160',
+    lqUrl: signedLqUrl,
+    lqFormat: 'HE-AAC 64'
+  });
 });
 
 function requestFieldValue(req, res, field) {
-	var gnUserId = ensureGnUserId(req, res);
-	if (!gnUserId) {
-		return;
-	}
-	var gnOptions = rythmApi.fieldvalues(field, gnUserId);
-	request(gnOptions, res);
+  var gnUserId = ensureGnUserId(req, res);
+  if (!gnUserId) {
+    return;
+  }
+  var gnOptions = rythmApi.fieldvalues(field, gnUserId);
+  request(gnOptions, res);
 }
 
 function ensureGnUserId(req, res) {
-	return ensureQueryParam(req, res, 'gnUserId');
+  return ensureQueryParam(req, res, 'gnUserId');
 }
 
 function ensureQueryParam(req, res, queryParamName) {
-	var value = req.query[queryParamName];
-	if (!value) {
-		sendError(res, queryParamName + ' parameter missing');
-	}
-	return value;
+  var value = req.query[queryParamName];
+  if (!value) {
+    sendError(res, queryParamName + ' parameter missing');
+  }
+  return value;
 }
 
 function sendError(res, message) {
-	res.status(500);
-	res.send(message);
+  res.status(500);
+  res.send(message);
 }
 
 function request(options, res) {
-	debug('(rythm-api) GET: https://' + options.host + options.path);
-	var req = https.request(options, function(proxiedResponse) {
-		processProxiedResponse(proxiedResponse, function(data) {
-			res.send(data)
-		});
-	});
-	req.on('error', function (err) {
-		debug('(rythm-api) GET ERROR: https://' + options.host + options.path);
-		debug(err);
-		sendError(res, err);
-	});
-	req.setTimeout(5000, function(socket){
-		req.abort();
-	});
-	req.end();
+  debug('(rythm-api) GET: https://' + options.host + options.path);
+  var req = https.request(options, function (proxiedResponse) {
+    processProxiedResponse(proxiedResponse, function (data) {
+      res.send(data)
+    });
+  });
+  req.on('error', function (err) {
+    debug('(rythm-api) GET ERROR: https://' + options.host + options.path);
+    debug(err);
+    sendError(res, err);
+  });
+  req.setTimeout(5000, function (socket) {
+    req.abort();
+  });
+  req.end();
 }
 
 function processProxiedResponse(proxiedResponse, onEnd) {
-	var str = '';
-	proxiedResponse.on('data', function (chunk) {
-		str += chunk;
-	});
-	proxiedResponse.on('end', function () {
-		onEnd(str);
-	});
+  var str = '';
+  proxiedResponse.on('data', function (chunk) {
+    str += chunk;
+  });
+  proxiedResponse.on('end', function () {
+    onEnd(str);
+  });
 }
 
 module.exports = router;

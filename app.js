@@ -13,7 +13,7 @@ var allowedRadioIps = config.allowedRadioIPs.split(',');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use(stylus.middleware(path.join(__dirname, 'public')));
@@ -23,7 +23,7 @@ app.use('/media', express.static(path.join(__dirname, 'public/media')));
 app.use('/imgs', express.static(path.join(__dirname, 'public/imgs')));
 app.use('/bower_components', express.static(path.join(__dirname, 'public/bower_components')));
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
 	var forwardedFor = req.headers['x-forwarded-for'];
 	if (forwardedFor) {
 		forwardedFor = forwardedFor.split(',')[0];
