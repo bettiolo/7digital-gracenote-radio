@@ -1,5 +1,6 @@
 7digital-gracenote-radio
 ========================
+[ ![Codeship Status for bettiolo/7digital-gracenote-radio](https://codeship.io/projects/607f09d0-40e2-0132-1a3f-265751b913a8/status)](https://codeship.io/projects/44002)
 
 Radio streaming with 7digital and Gracenote integration.
 
