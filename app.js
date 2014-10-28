@@ -25,7 +25,6 @@ app.use('/bower_components', express.static(path.join(__dirname, 'public/bower_c
 
 app.use(function (req, res, next) {
   if (req.path = '/api/status') {
-    console.log('Skipping Auth for health check');
     next();
     return;
   }
