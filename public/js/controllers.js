@@ -182,6 +182,36 @@ angular.module('7gRadio.controllers', [])
         });
     };
 
+    $scope.createRadioFromSeed = function () {
+      $scope.radio = null;
+      radioApi.radio.create.get({
+        gnUserId: $scope.$storage.gracenoteUserId,
+        seed: $scope.seed
+      }).$promise
+        .then(function (response) {
+          var tracks = response.RESPONSE[0].ALBUM.map(function (album) {
+            var artist = album.TRACK[0].ARTIST
+              ? album.TRACK[0].ARTIST[0].VALUE
+              : album.ARTIST[0].VALUE;
+            var sdId = album.TRACK[0].XID
+              ? album.TRACK[0].XID[0].DATASOURCE == 'sevendigitalid'
+              ? album.TRACK[0].XID[0].VALUE
+              : null
+              : null;
+            return {
+              album: album.TITLE[0].VALUE,
+              artist: artist,
+              title: album.TRACK[0].TITLE[0].VALUE,
+              id: sdId
+            }
+          });
+          $scope.radio = {
+            id: response.RESPONSE[0].RADIO[0].ID,
+            tracks: tracks
+          };
+        });
+    };
+
     $scope.isRadioCreated = function () {
       return !!$scope.radio;
     };

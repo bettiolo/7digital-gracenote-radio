@@ -63,11 +63,21 @@ router.get('/user/create', function (req, res) {
 
 router.get('/radio/create', function (req, res) {
   var gnUserId = ensureGnUserId(req, res);
-  var artistName = ensureQueryParam(req, res, 'artistName');
-  if (!gnUserId || !artistName) {
+  var artistName = req.query['artistName'];
+  var seed = req.query['seed'];
+
+  if (!artistName && !seed) {
+    sendError(res, 'artistName or seed parameter missing');
+  }
+
+  if (!gnUserId || (!artistName && !seed)) {
     return;
   }
-  request(rythmApi.createRadio(artistName, gnUserId), res);
+  if (seed) {
+    request(rythmApi.createRadioBySeed(seed, gnUserId), res);
+  } else {
+    request(rythmApi.createRadio(artistName, gnUserId), res);
+  }
 });
 
 //router.get('/radio/recommend', function (req, res) {

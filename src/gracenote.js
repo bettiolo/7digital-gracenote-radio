@@ -24,15 +24,26 @@ function RythmApi(clientId) {
 	};
 
 	RythmApi.prototype.createRadio = function (artistName, userId) {
-		var method = "radio/create";
-		return this._createOptions(method, {
-			'artist_name': artistName,
-			user: userId,
-			'select_extended': 'cover,link',
-			'return_count': '25',
-			'filter_catalog': 'sevendigitalid'
-		});
-	};
+    var method = "radio/create";
+    return this._createOptions(method, {
+      'artist_name': artistName,
+      user: userId,
+      'select_extended': 'cover,link',
+      'return_count': '25',
+      'filter_catalog': 'sevendigitalid'
+    });
+  };
+
+  RythmApi.prototype.createRadioBySeed = function (seed, userId) {
+    var method = "radio/create";
+    return this._createOptions(method, {
+      'seed': seed,
+      user: userId,
+      'select_extended': 'cover,link',
+      'return_count': '25',
+      'filter_catalog': 'sevendigitalid'
+    });
+  };
 
 	RythmApi.prototype._createOptions = function (method, parameters) {
 		var path = this._pathTemplate.replace('{{METHOD}}', method);

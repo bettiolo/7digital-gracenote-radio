@@ -12,6 +12,11 @@ div(ng-controller='mainController')
 
   fieldset.artistChooserWrap(ng-show='isRegistered()')
     legend Step 2: Select an artist
+
+    div(ng-show='isArtistSelected()') Selected artist:&nbsp;
+      b {{ artist.name }}&nbsp;
+      button(ng-click='resetArtist()') Clear artist
+
     .center
 
       fieldset.artistChooser.by-7digital
@@ -43,10 +48,19 @@ div(ng-controller='mainController')
               | {{ topArtist.position }}. {{ topArtist.name }}
 
   fieldset.by-gracenote(ng-show='isArtistSelected()')
-    legend Step 3: Create a Personal radio
+    legend Step 3a: Create a Personal radio
     div Selected artist: {{ artist.name }}&nbsp;
       button(ng-click='resetArtist()') Clear artist
       button(ng-click='createRadio()') Create radio
+
+  fieldset(ng-show='isRegistered()')
+    legend Step 3b: Create a personal radio from a Gracenote seed
+
+    label
+      | Gracenote seed&nbsp;
+      input(type='text', ng-model='seed')
+      | &nbsp;
+    button(ng-click='createRadioFromSeed()') Create radio
 
   fieldset.radioPlayer(ng-show='isRadioCreated()')
     legend Step 4: Play Radio
