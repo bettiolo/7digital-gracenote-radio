@@ -4,18 +4,18 @@
 
 Radio streaming with 7digital and Gracenote integration.
 
-The matching of 7digita-Gracenote is on the US catalogue so you need to always pass the &country=US parameter to all the calls to 7digital.
+## Pre-requisites
 
-Example: http://api.7digital.com/1.2/artist/chart?oauth_consumer_key=YOUR_KEY_HERE&country=US
+[nodejs + npm](http://nodejs.org)
 
-Pre-requisites: [nodejs + npm](http://nodejs.org)
+## Running the server
 
 To install run: 
 ```bash
 npm install
 ```
 
-Configure the following environment variables:
+Configure the following environment variables in production:
 ```bash
 export GRACENOTE_CLIENT_ID="YOUR-CLIENT-ID"
 export SEVENDIGITAL_CONSUMER_KEY="YOUR-CONSUMER-KEY"
@@ -28,3 +28,30 @@ npm start
 ```
 
 A new server will be executed on http://localhost:3000
+
+## Running the tests
+
+Configure the following environment variables to run tests:
+```bash
+export GRACENOTE_TEST_USER_ID="YOUR-USER-ID"
+```
+
+There are two ways of running the tests:
+- Option 1: Start the server with `npm start` and then run the tests with `npm test`
+- Option 2: Run `./run-specs.sh`
+
+The second option will run a local server, run the tests and kill the server and return.
+
+## Deployment
+
+The deployment happens automatically on every git push to this repository.
+
+Codeship.io will:
+- Wait for a push
+- Create a new vm
+- Clone the changes to the build agent
+- Install `nodejs`
+- Run `npm install`
+- Run the tests
+- Deploy to heroku
+- Hit the api's status endpoint
