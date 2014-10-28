@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "DEBUG=app nodemon --ignore public/ --ignore views/ ./bin/www",
-    "postinstall": "bower install"
+    "postinstall": "bower install",
+    "test": "jasmine-node spec/"
   },
   "dependencies": {
     "7digital-api": "^0.27.1",
@@ -17,5 +18,9 @@
     "nodemon": "^1.2.1",
     "socket.io": "^1.1.0",
     "stylus": "0.49.1"
+  },
+  "devDependencies": {
+    "frisby": "^0.8.3",
+    "jasmine-node": "^1.14.5"
   }
 }
