@@ -74,11 +74,37 @@ router.get('/radio/create', function (req, res) {
     return;
   }
   if (seed) {
-    request(rythmApi.createRadioBySeed(seed, gnUserId), res);
+    request(rythmApi.createRadioBySeed(seed, gnUserId), res, parseRadioCreateResponse);
   } else {
-    request(rythmApi.createRadio(artistName, gnUserId), res);
+    request(rythmApi.createRadio(artistName, gnUserId), res, parseRadioCreateResponse);
   }
 });
+
+var parseRadioCreateResponse = function (data) {
+  var parsedData = JSON.parse(data);
+  var tracks = parsedData.RESPONSE[0].ALBUM.map(function (album) {
+    var artist = album.TRACK[0].ARTIST
+      ? album.TRACK[0].ARTIST[0].VALUE
+      : album.ARTIST[0].VALUE;
+    var sdId = album.TRACK[0].XID
+      ? album.TRACK[0].XID[0].DATASOURCE == 'sevendigitalid'
+      ? album.TRACK[0].XID[0].VALUE
+      : null
+      : null;
+    var gnId = album.TRACK[0]['GN_ID'];
+    return {
+      album: album.TITLE[0].VALUE,
+      artist: artist,
+      title: album.TRACK[0].TITLE[0].VALUE,
+      sevendigitalId: sdId,
+      gracenoteId: gnId
+    }
+  });
+  return {
+    gracenoteRadioId: parsedData.RESPONSE[0].RADIO[0].ID,
+    tracks: tracks
+  };
+};
 
 //router.get('/radio/recommend', function (req, res) {
 //	res.json(require('../src/radio/recommend.json'));
@@ -135,11 +161,15 @@ function sendError(res, message) {
   res.send(message);
 }
 
-function request(options, res) {
+function request(options, res, parseResponse) {
   debug('(rythm-api) GET: https://' + options.host + options.path);
   var req = https.request(options, function (proxiedResponse) {
     processProxiedResponse(proxiedResponse, function (data) {
-      res.send(data)
+      if(parseResponse) {
+        res.json(parseResponse(data));
+      } else {
+        res.send(data)
+      }
     });
   });
   req.on('error', function (err) {

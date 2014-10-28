@@ -36,13 +36,14 @@ function RythmApi(clientId) {
 
   RythmApi.prototype.createRadioBySeed = function (seed, userId) {
     var method = "radio/create";
-    return this._createOptions(method, {
-      'seed': seed,
+    var options = this._createOptions(method, {
       user: userId,
       'select_extended': 'cover,link',
       'return_count': '25',
       'filter_catalog': 'sevendigitalid'
     });
+    options.path += '&seed=' + seed;
+    return options;
   };
 
 	RythmApi.prototype._createOptions = function (method, parameters) {
