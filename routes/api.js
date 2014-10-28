@@ -13,6 +13,10 @@ var api = require('7digital-api').configure({
 var artists = new api.Artists();
 var rythmApi = new gracenote.RythmApi(config.gracenoteClientId);
 
+router.get('/status', function (req, res) {
+  res.send('OK');
+});
+
 router.get('/artist/search/:q', function (req, res) {
   artists.search({q: req.params.q}, function (err, data) {
     res.json(data);
@@ -165,7 +169,7 @@ function request(options, res, parseResponse) {
   debug('(rythm-api) GET: https://' + options.host + options.path);
   var req = https.request(options, function (proxiedResponse) {
     processProxiedResponse(proxiedResponse, function (data) {
-      if(parseResponse) {
+      if (parseResponse) {
         res.json(parseResponse(data));
       } else {
         res.send(data)
