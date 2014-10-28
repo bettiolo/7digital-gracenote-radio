@@ -100,7 +100,7 @@ var parseRadioCreateResponse = function (data) {
       album: album.TITLE[0].VALUE,
       artist: artist,
       title: album.TRACK[0].TITLE[0].VALUE,
-      sevendigitalId: sdId,
+      sevendigitalId: parseInt(sdId),
       gracenoteId: gnId
     }
   });
