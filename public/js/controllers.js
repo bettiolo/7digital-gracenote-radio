@@ -217,40 +217,88 @@ angular.module('7gRadio.controllers', [])
       radioApi.stream.get({trackId: trackId})
         .$promise
         .then(function (response) {
-          $scope.streaming = {
+          var playlistIndex = $scope.getPlaylistIndexByTrackId(trackId);
+          $scope.currentStream = {
+            trackId: trackId,
+            playlistIndex: playlistIndex,
             hqFormat: response.hqFormat,
             hqUrl: response.hqUrl,
             lqFormat: response.lqFormat,
             lqUrl: response.lqUrl
           };
-          $scope.playlist = [{
-            src: $scope.streaming.hqUrl,
-            type: 'audio/mp4'
-          }];
+          $scope.play();
+          $scope.queueNext();
+        });
+    };
 
+    $scope.getPlaylistIndexByTrackId = function (trackId) {
+      for(var i = 0; i < $scope.radio.tracks.length; i++) {
+        if ($scope.radio.tracks[i].sevendigitalId == trackId) {
+          return i;
+        }
+      }
+      return -1;
+    };
+
+    $scope.queueNext = function() {
+      $scope.nextStream = null;
+      if ($scope.currentStream.playlistIndex < $scope.radio.tracks.length - 1) {
+        $scope.queue($scope.radio.tracks[$scope.currentStream.playlistIndex + 1].sevendigitalId);
+      }
+    };
+
+    $scope.queue = function (trackId) {
+      radioApi.stream.get({trackId: trackId})
+        .$promise
+        .then(function (response) {
+          var playlistIndex = $scope.getPlaylistIndexByTrackId(trackId);
+          $scope.nextStream = {
+            trackId: trackId,
+            playlistIndex: playlistIndex,
+            hqFormat: response.hqFormat,
+            hqUrl: response.hqUrl,
+            lqFormat: response.lqFormat,
+            lqUrl: response.lqUrl
+          };
         });
     };
 
     $scope.isStreaming = function () {
-      return !!$scope.streaming;
+      return !!$scope.currentStream;
     };
 
-    $scope.$watch('playlist', function () {
+    // $scope.$watch('playlist', function () {
+    $scope.play = function () {
+      $scope.playlist = [{
+        src: $scope.currentStream.hqUrl,
+        type: 'audio/mp4'
+      }];
       $scope.audio1.one('canplay', function () {
-        $scope.audio1.play(0);
+        $scope.audio1.play(0, true);
 //				$scope.audio1.play(0, true); // does not autoplay
-//				$scope.audio1.one('play', function(){
-//					$scope.audio1.seek(0);
-//				});
-//				$scope.audio1.on('ended', function(){
-//					if ($scope.audio1.currentTrack === $scope.audio1.tracks) {
-//						$scope.audio1.play(0);
-//					} else {
-//						$scope.audio1.play($scope.audio1.currentTrack + 1);
-//					}
-//				});
+				$scope.audio1.one('play', function(){
+					$scope.audio1.seek(0);
+				});
+        $scope.audio1.on('ended', function () {
+          console.log('Track ended');
+          $scope.playNext();
+          //if ($scope.audio1.currentTrack === $scope.audio1.tracks) {
+          //  $scope.audio1.play(0);
+          //} else {
+          //  $scope.audio1.play($scope.audio1.currentTrack + 1);
+          //}
+        });
       });
-    });
+    };
+    //});
+
+    $scope.playNext = function () {
+      console.log('Play next');
+      console.log($scope.currentStream);
+      $scope.currentStream = $scope.nextStream;
+      $scope.play();
+      $scope.queueNext();
+    };
 
     $scope.seekPercentage = function ($event) {
       var percentage = ($event.offsetX / $event.target.offsetWidth);

@@ -117,10 +117,16 @@ div(ng-controller='mainController')
         | Type: {{ playlistItem.type }}
 
   fieldset.by-7digital(ng-show='isStreaming()')
-    legend (DEBUG INFO) Streaming info
-    ul.truncate
-      li {{ streaming.hqFormat }}: {{ streaming.hqUrl }}
-      li {{ streaming.lqFormat }}: {{ streaming.lqUrl }}
+    legend (DEBUG INFO) Current Stream
+    pre
+     | {{ radio.tracks[currentStream.playlistIndex] | json }}
+     | {{ currentStream | json }}
+
+  fieldset.by-7digital(ng-show='isStreaming()')
+    legend (DEBUG INFO) Next Stream
+    pre
+      | {{ radio.tracks[nextStream.playlistIndex] | json }}
+      | {{ nextStream | json }}
 
   //fieldset.by-7digital(ng-show='isArtistSelected()')
   //	legend Artist's Top Tracks (optional)
