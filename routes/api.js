@@ -86,6 +86,9 @@ router.get('/radio/create', function (req, res) {
 
 var parseRadioCreateResponse = function (data) {
   var parsedData = JSON.parse(data);
+  if (parsedData.RESPONSE[0].STATUS === "NO_MATCH") {
+    return null;
+  }
   var tracks = parsedData.RESPONSE[0].ALBUM.map(function (album) {
     var artist = album.TRACK[0].ARTIST
       ? album.TRACK[0].ARTIST[0].VALUE
@@ -170,7 +173,13 @@ function request(options, res, parseResponse) {
   var req = https.request(options, function (proxiedResponse) {
     processProxiedResponse(proxiedResponse, function (data) {
       if (parseResponse) {
-        res.json(parseResponse(data));
+        var parsedResponse = parseResponse(data);
+        if (parsedResponse) {
+          res.json(parsedResponse);
+        } else {
+          res.status(404);
+          res.json(JSON.parse(data));
+        }
       } else {
         res.send(data)
       }
