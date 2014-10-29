@@ -1,7 +1,7 @@
 angular.module('7gRadio.services', [])
-  .factory('socket', function (socketFactory) {
-    return socketFactory();
-  })
+  //.factory('socket', function (socketFactory) {
+  //  return socketFactory();
+  //})
   .factory('radioApi', function ($resource) {
     return {
       user: {
