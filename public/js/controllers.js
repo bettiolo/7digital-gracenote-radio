@@ -232,7 +232,7 @@ angular.module('7gRadio.controllers', [])
     };
 
     $scope.getPlaylistIndexByTrackId = function (trackId) {
-      for(var i = 0; i < $scope.radio.tracks.length; i++) {
+      for (var i = 0; i < $scope.radio.tracks.length; i++) {
         if ($scope.radio.tracks[i].sevendigitalId == trackId) {
           return i;
         }
@@ -240,7 +240,7 @@ angular.module('7gRadio.controllers', [])
       return -1;
     };
 
-    $scope.queueNext = function() {
+    $scope.queueNext = function () {
       $scope.nextStream = null;
       if ($scope.currentStream.playlistIndex < $scope.radio.tracks.length - 1) {
         $scope.queue($scope.radio.tracks[$scope.currentStream.playlistIndex + 1].sevendigitalId);
@@ -276,9 +276,9 @@ angular.module('7gRadio.controllers', [])
       $scope.audio1.one('canplay', function () {
         $scope.audio1.play(0, true);
 //				$scope.audio1.play(0, true); // does not autoplay
-				$scope.audio1.one('play', function(){
-					$scope.audio1.seek(0);
-				});
+        $scope.audio1.one('play', function () {
+          $scope.audio1.seek(0);
+        });
         $scope.audio1.on('ended', function () {
           console.log('Track ended');
           $scope.playNext();
