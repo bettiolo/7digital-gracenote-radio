@@ -126,15 +126,21 @@ var parseRadioCreateResponse = function (data) {
 
 router.get('/stream/:trackId', function (req, res) {
   var oauth = new api.OAuth();
-  var signedHqUrl = oauth.sign('https://stream.svc.7digital.net/stream/catalogue', {
+  var signedMp3Url = oauth.sign('http://stream.svc.7digital.net/stream/catalogue', {
+    trackId: req.params.trackId,
+    formatId: 48
+  });
+  var signedHqUrl = oauth.sign('http://stream.svc.7digital.net/stream/catalogue', {
     trackId: req.params.trackId,
     formatId: 56
   });
-  var signedLqUrl = oauth.sign('https://stream.svc.7digital.net/stream/catalogue', {
+  var signedLqUrl = oauth.sign('http://stream.svc.7digital.net/stream/catalogue', {
     trackId: req.params.trackId,
     formatId: 55
   });
   res.json({
+    mp3Url: signedMp3Url,
+    mp3Format: 'MP3 256',
     hqUrl: signedHqUrl,
     hqFormat: 'AAC 160',
     lqUrl: signedLqUrl,
