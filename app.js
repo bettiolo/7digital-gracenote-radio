@@ -24,7 +24,7 @@ app.use('/imgs', express.static(path.join(__dirname, 'public/imgs')));
 app.use('/bower_components', express.static(path.join(__dirname, 'public/bower_components')));
 
 app.use(function (req, res, next) {
-  if (req.path = '/api/status') {
+  if (req.path == '/api/status') {
     next();
     return;
   }
@@ -35,7 +35,7 @@ app.use(function (req, res, next) {
   var ip = req.connection.remoteAddress;
   var proxyMatch;
   if (forwardedFor) {
-    proxyMatch = allowedRadioIps.indexOf(forwardedFor) > -1
+    proxyMatch = allowedRadioIps.indexOf(forwardedFor) > -1;
   }
   var ipMatch = allowedRadioIps.indexOf(ip) > -1;
   if (!proxyMatch && !ipMatch) {
